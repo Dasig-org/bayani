@@ -4,6 +4,15 @@
 
 **What it's for:** reading informal coordination messages (Filipino and English, usually mixed in the same message) on the phone, offline, and proposing BIX records. It proposes; a person or a declared rule commits. It never stores a raw message unless the sender consented.
 
+**Where it works (decided 2026-10-31):** Bayani is built into the Dasig app and any BIX implementation, not only the group chat. Everything it produces is a BIX proposal (`intent: proposal` / `status: draft` with Provenance naming the model), checked by Bayanihan Core and committed only by a person or a declared rule.
+
+| Use | Reads | Proposes (BIX) |
+|---|---|---|
+| Break down a project, task or step | The Initiative or Task, the group's saved teams (`InitiativeTemplate`) and kinds of work (`TaskDefinition`), past projects | Child `Task`s with `partOf`, `dependsOn`, `team`; or a draft `TaskDefinition` that becomes active only with `ratifiedBy` |
+| Suggest who to ask | The Team roster, time `Offer`s with `recurrence`, each person's confirmed past work, `goodFirstStep` | A `requested` owner on a Task, with the reason shown. Never a score or ranking; the person accepts or declines |
+| Turn messages into drafts | A message, with the sender's consent to keep it | `Offer`, `Need`, Task release or `receive` step (spec worked example) |
+| Draft a report narrative | A `Report` and its derived figures | Narrative text only. Figures stay derived by rule; the model never sets one |
+
 **Naming:** versioned by generation and size, like other model families, e.g. `Bayani-1-1B`. Not "1.0".
 
 **Model constraints:**
