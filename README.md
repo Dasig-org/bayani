@@ -12,6 +12,7 @@
 | Suggest who to ask | The Team roster, time `Offer`s with `recurrence`, each person's confirmed past work, `goodFirstStep` | A `requested` owner on a Task, with the reason shown. Never a score or ranking; the person accepts or declines |
 | Turn messages into drafts | A message, with the sender's consent to keep it | `Offer`, `Need`, Task release or `receive` step (spec worked example) |
 | Draft a report narrative | A `Report` and its derived figures | Narrative text only. Figures stay derived by rule; the model never sets one |
+| Ask about your group (a possible direction, not decided) | The group's BIX records the person can already see, on the phone | Summaries and next steps in a chat; any change it suggests is still a proposal |
 
 **Naming:** versioned by generation and size, like other model families, e.g. `Bayani-1-1B`. Not "1.0".
 
