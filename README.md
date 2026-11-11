@@ -2,24 +2,74 @@
 
 **Bayani does not exist yet.** This folder will hold the work to build it. Never describe it as trained, deployed or benchmarked until it is.
 
-**What it's for:** reading informal coordination messages (Filipino and English, usually mixed in the same message) on the phone, offline, and proposing BIX records. It proposes; a person or a declared rule commits. It never stores a raw message unless the sender consented.
+**What it's for (decided 2026-11-11):** Bayani knows BIX. It reads a group's projects, teams (committees), tasks and roster, on the phone, offline, and helps the user break work into smaller steps that core members and volunteers can take on, and review a plan for what needs a second look. It proposes; a person or a declared rule commits.
 
-**Where it works (decided 2026-10-31):** Bayani is built into the Dasig app and any BIX implementation, not only the group chat. Everything it produces is a BIX proposal (`intent: proposal` / `status: draft` with Provenance naming the model), checked by Bayanihan Core and committed only by a person or a declared rule.
+**Where it works (decided 2026-10-31):** inside the Dasig app and any BIX implementation. Everything it produces is a BIX proposal (`intent: proposal` / `status: draft`, with Provenance naming the model and version), checked by Bayanihan Core and committed only by a person or a declared rule.
 
-| Use | Reads | Proposes (BIX) |
-|---|---|---|
-| Break down a project, task or step | The Initiative or Task, the group's saved teams (`InitiativeTemplate`) and kinds of work (`TaskDefinition`), past projects | Child `Task`s with `partOf`, `dependsOn`, `team`; or a draft `TaskDefinition` that becomes active only with `ratifiedBy` |
-| Suggest who to ask | The Team roster, time `Offer`s with `recurrence`, each person's confirmed past work, `goodFirstStep` | A `requested` owner on a Task, with the reason shown. Never a score or ranking; the person accepts or declines |
-| Turn messages into drafts | A message, with the sender's consent to keep it | `Offer`, `Need`, Task release or `receive` step (spec worked example) |
-| Draft a report narrative | A `Report` and its derived figures | Narrative text only. Figures stay derived by rule; the model never sets one |
-| Ask about your group (a possible direction, not decided) | The group's BIX records the person can already see, on the phone | Summaries and next steps in a chat; any change it suggests is still a proposal |
+## Uses
 
-**Naming:** versioned by generation and size, like other model families, e.g. `Bayani-1-1B`. Not "1.0".
+| Use | Status | Reads | Proposes (BIX) |
+|---|---|---|---|
+| Break down a project, task or step | **Bayani-1** | The Initiative or Task, the group's `InitiativeTemplate`s and `TaskDefinition`s, past projects | Child `Task`s with `partOf`, `dependsOn`, `team`, `audience`, `goodFirstStep`; or a draft `TaskDefinition` that becomes active only with `ratifiedBy` |
+| Review the plan | **Bayani-1** | The Initiative, its Teams, Tasks and roster | Suggestions: split a task, add a step projects like this usually include, move a task to another team, merge a duplicate, mark a good first step |
+| Help find who to ask | **Rule, not the model** | Team roster, `Offer`s with `recurrence`, confirmed past work, who was asked recently | Candidates are chosen by a declared rule. Bayani only writes the reason shown beside each name. Never a score or ranking of people |
+| Draft a report narrative | After breakdown | A `Report` and its derived figures | Narrative text only. Figures stay derived by rule |
+| Turn messages into drafts | Later | A message, with the sender's `share-messages-for-bayani` Consent | `Offer`, `Need`, Task release or `receive` step |
+| Ask about your group | Exploring | The group's BIX records the person can already see | Summaries; any change is still a proposal |
 
-**Model constraints:**
+These stay plain code, never the model: unowned or overdue tasks, empty teams, open slots, who is free.
 
-- The base must be a non-frontier open model. Llama is excluded (Llama 1B/3B are slimmed-down frontier models). Candidates: OLMo, SmolLM. Gemma and Qwen are a grey zone.
-- It runs on the device from day one. A frontier model may be used only as an offline comparison, never in the product.
-- Grammar-constrained JSON output (e.g. llama.cpp grammars), checked by the BIX engine.
+## How it works: judgments first, writing only where needed
 
-**Coming in this folder:** the evaluation harness, the consented test set (about 100 labelled messages from pilot organizations), and benchmark results against Filipino suites such as Batayan, Kalahi and FilBench (which covers Cebuano).
+Inspired by TypeSafe's Jev ("System One"): code owns the workflow and asks the model narrow questions with typed answers and probabilities. Bayani is still a small language model; this is how it is used.
+
+| Question | Shape |
+|---|---|
+| Which template or past project is this most like? | choice, with "none fit" |
+| Does this template step apply here? | yes/no, per step |
+| Is this task really several tasks? | yes/no |
+| How ready is this task to claim (vague → clear)? | score |
+| Which team owns this task? | choice over the group's teams, with "none fit" |
+| Core team only, or open to volunteers? | choice |
+| Good first step for a newcomer? | yes/no |
+| Must A finish before B? | yes/no, over pairs the code picks |
+| Is this a duplicate of that? | yes/no |
+| Is a usual step missing? | yes/no, per candidate step from templates and past projects |
+
+**Writing:** new step titles are picked from candidates first (the group's `TaskDefinition`s, past tasks, a shared open library of steps for common activities). Bayani writes a short title, under a grammar, only when none fits.
+
+**Why this shape:** answers are one token, so training needs less data, labels are quick, evaluation is exact, probabilities set when a suggestion is shown, and a model small enough for a browser can do it.
+
+## Contract with the app (any BIX implementation)
+
+1. **Core stays model-free.** Bayani lives in its own package (prompt and context building, grammar, mapping output back to records). The inference backend is pluggable: llama.rn (native), llama.cpp in the browser (wasm/WebGPU), llama.cpp on a server.
+2. **Input** is the record being worked on plus a small context pack built under the current user's permissions: teams, related tasks, templates, visible roster nicknames, today's date. Bayani never sees what the user can't.
+3. **No invented IDs.** The model refers to short handles from the context pack (`T3`, `P2`); the package maps them back.
+4. **Output** is validated by Core. Core writes the Provenance, not the model. If it fails, the app shows the manual form; it never retries with a cloud model.
+5. **The app works fully without Bayani.** The model download is optional, Wi-Fi only, behind a flag.
+6. **Product metric:** the share of suggestions a lead accepts unchanged, read from Provenance (confirmed, edited, rejected).
+
+## Data and training
+
+- **v0 is seeded by us (decided 2026-11-11), not pilot users.** Each example is a sample project with its teams and roster, paired with the BIX draft Bayani should suggest.
+- **Generated by code from BIX:** take a good project built from an `InitiativeTemplate` and break it on purpose (remove a step, merge two tasks, wrong team, drop a dependency). Each break is an exact label.
+- **The test set is written first and kept apart.** Never trained on; ideally partly written by someone who didn't write the training data, so scores aren't inflated by our own phrasing.
+- **Synthetic variants** (Filipino and English, mixed) come from an open model, not a frontier API, so the whole lineage stays open.
+- **Training:** LoRA on a 360M–1B base, answering a single option token so probabilities come from the logits. Likely fits on the M3 with MLX; cloud only for a full fine-tune or a sweep.
+- **Later, with consent:** pilot projects and the edit between what Bayani proposed and what a lead confirmed.
+
+## Model constraints
+
+- The base must be a non-frontier open model. Llama is excluded (Llama 1B/3B are slimmed-down frontier models). Candidates: OLMo, SmolLM. Gemma and Qwen are a grey zone; ask before using.
+- It runs on the device from day one. Jev or a frontier model may be used only as an offline comparison, never in the product.
+- Grammar-constrained output (llama.cpp grammars), checked by Core.
+
+**Two sizes may be needed:** a small one (~360M) for the PWA on iPhones, a larger one (~1–1.7B) for the native apps. Test the small one in Safari on a real iPhone before relying on it in the pilot.
+
+**Naming:** versioned by generation and size, e.g. `Bayani-1-360M`, `Bayani-1-1B`. Not "1.0".
+
+## Evaluation
+
+Per question: accuracy, and whether its probabilities match how often it's right. Baselines: off-the-shelf open models with the grammar, and Jev or a frontier model offline. Filipino suites (Batayan, Kalahi, FilBench, which covers Cebuano) check that training doesn't damage Filipino; the task eval is the headline.
+
+**Coming in this folder:** the evaluation harness, the seeded test set, the generator for broken-on-purpose projects, and benchmark results.
