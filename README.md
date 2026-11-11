@@ -56,7 +56,7 @@ Inspired by TypeSafe's Jev ("System One"): code owns the workflow and asks the m
 - **The test set is written first and kept apart.** Never trained on; ideally partly written by someone who didn't write the training data, so scores aren't inflated by our own phrasing.
 - **English only (decided 2026-11-11).** Training and test data are in English; coordinators use English. No Filipino or Taglish work for Bayani-1.
 - **Synthetic variants** (more phrasings of the same projects) come from an open model, not a frontier API, so the whole lineage stays open.
-- **Training:** LoRA on a 360M–1B base, answering a single option token so probabilities come from the logits. Likely fits on the M3 with MLX; cloud only for a full fine-tune or a sweep.
+- **Training:** LoRA on a 360M–1B base, answering a single option token so probabilities come from the logits. Trained in the cloud with Unsloth on a free GPU notebook (Kaggle or Google Colab), because the M3 Air has 8 GB (decided 2026-11-11). The Mac prepares the data, runs the evaluation, and runs the exported GGUF model with llama.cpp.
 - **Later, with consent:** pilot projects and the edit between what Bayani proposed and what a lead confirmed.
 
 ## Model constraints
