@@ -2,43 +2,48 @@
 
 **Bayani does not exist yet.** This folder will hold the work to build it. Never describe it as trained, deployed or benchmarked until it is.
 
-**What it's for (decided 2026-11-11):** Bayani knows BIX. It reads a group's projects, teams (committees), tasks and roster, on the phone, offline, and helps the user break work into smaller steps that core members and volunteers can take on, and review a plan for what needs a second look. It proposes; a person or a declared rule commits.
+**What it's for (decided 2026-11-13): project memory.** A coordinator has to remember everything a project needs, and
+most of that knowledge left with whoever ran it last. Bayani-1 has one job: **"What else does this project need, and
+is anything late or out of order?"**, answered from the group's own past projects (or starter Practices for a group's
+first project), and at close-out, keeping what was learned for next time. Bayani-1 starts with memory per project; the
+organization's memory is built from projects later.
 
-**Where it works (decided 2026-10-31):** inside the Dasig app and any BIX implementation. Everything it produces is a BIX proposal (`intent: proposal` / `status: draft`, with Provenance naming the model and version), checked by Bayanihan Core and committed only by a person or a declared rule.
+**The structured memory is BIX, not the model (decided 2026-11-13).** Because Bayani is a small model, BIX holds the
+memory and rules do the counting: each kind of step is a `Practice` with `observed` figures calculated by rule
+(how often it was needed, when it was done, what came before it, how often it was added late), and each step points to
+one through `Task.practice`. Bayani only makes the judgments rules can't. Spec: BIX "Project memory: Practices";
+Core: `packages/core/src/practice.ts`.
 
-## Uses
+**Where it works (decided 2026-10-31):** inside the Dasig app and any BIX implementation. Everything it produces is a BIX proposal (`intent: proposal` / `status: draft`, or a `ChangeProposal` for an edit, with Provenance naming the model and version), checked by Bayanihan Core and committed only by a person or a declared rule. A group turns it on with the `memory` assistance area.
 
-| Use | Status | Reads | Proposes (BIX) |
-|---|---|---|---|
-| Break down a project, task or step | **Bayani-1** | The Initiative or Task, the group's `InitiativeTemplate`s and `TaskDefinition`s, past projects | Child `Task`s with `partOf`, `dependsOn`, `team`, `audience`, `goodFirstStep`; or a draft `TaskDefinition` that becomes active only with `ratifiedBy` |
-| Review the plan | **Bayani-1** | The Initiative, its Teams, Tasks and roster | Suggestions: split a task, add a step projects like this usually include, move a task to another team, merge a duplicate, mark a good first step |
-| Help find who to ask | **Rule, not the model** | Team roster, `Offer`s with `recurrence`, confirmed past work, who was asked recently | Candidates are chosen by a declared rule. Bayani only writes the reason shown beside each name. Never a score or ranking of people |
-| Draft a report narrative | After breakdown | A `Report` and its derived figures | Narrative text only. Figures stay derived by rule |
-| Turn messages into drafts | Later | A message, with the sender's `share-messages-for-bayani` Consent | `Offer`, `Need`, Task release or `receive` step |
-| Ask about your group | Exploring | The group's BIX records the person can already see | Summaries; any change is still a proposal |
+## Rules do this, Bayani does that
 
-These stay plain code, never the model: unowned or overdue tasks, empty teams, open slots, who is free.
+| Question | Who | How |
+|---|---|---|
+| What does this project usually need that it doesn't have? | Rules, then Bayani | Core `usuallyNeeded` lists candidates; Bayani judges whether each applies to *this* project |
+| Is anything usually done by now? | Rules | Core `usuallyDoneByNow` (from `dayFromStart.median`) |
+| Is anything out of order? | Rules | Core `outOfOrder` (from `Practice.after[]`) |
+| Is this step the same as a known Practice? | **Bayani** | Proposes `Task.practice` |
+| Was this step a one-off? | **Bayani** | At close-out: keep as a new Practice or not |
+| What did we learn? | **Bayani drafts, a person writes** | A proposed `lesson` |
+| Breaking a step down, reviewing a plan | Bayani, from Practices | Child steps proposed from the Practices that are usually `partOf` it |
 
-## How it works: judgments first, writing only where needed
+Who to ask stays a rule. Figures are never set by the model (BIX rules 21, 23).
 
-Inspired by TypeSafe's Jev ("System One"): code owns the workflow and asks the model narrow questions with typed answers and probabilities. Bayani is still a small language model; this is how it is used.
+## The questions Bayani-1 is trained on
 
 | Question | Shape |
 |---|---|
-| Which template or past project is this most like? | choice, with "none fit" |
-| Does this template step apply here? | yes/no, per step |
-| Is this task really several tasks? | yes/no |
-| How ready is this task to claim (vague → clear)? | score |
-| Which team owns this task? | choice over the group's teams, with "none fit" |
-| Core team only, or open to volunteers? | choice |
-| Good first step for a newcomer? | yes/no |
-| Must A finish before B? | yes/no, over pairs the code picks |
-| Is this a duplicate of that? | yes/no |
-| Is a usual step missing? | yes/no, per candidate step from templates and past projects |
+| Is step S the same kind of step as Practice P? | yes/no, over candidates the code picks |
+| Does Practice P apply to this project? | yes/no |
+| Which known Practice, if any, is step S? | choice over candidates, with "none" |
+| Was step S a one-off for this project? | yes/no |
+| Which team usually owns a step like S? | choice over the group's teams, with "none fit" |
+| A general title for step S ("Book Mactan Expo" → "Book the venue") | short text under a grammar, only when no Practice fits |
 
-**Writing:** new step titles are picked from candidates first (the group's `TaskDefinition`s, past tasks, a shared open library of steps for common activities). Bayani writes a short title, under a grammar, only when none fits.
+**Writing:** step titles come from the group's Practices first. Bayani writes a short general title, under a grammar, only when no Practice fits.
 
-**Why this shape:** answers are one token, so training needs less data, labels are quick, evaluation is exact, probabilities set when a suggestion is shown, and a model small enough for a browser can do it.
+**Why this shape:** answers are one token, so training needs less data, labels are quick, evaluation is exact, probabilities set when a suggestion is shown, and a model small enough for a phone can do it.
 
 ## Contract with the app (any BIX implementation)
 
@@ -51,8 +56,8 @@ Inspired by TypeSafe's Jev ("System One"): code owns the workflow and asks the m
 
 ## Data and training
 
-- **v0 is seeded by us (decided 2026-11-11), not pilot users.** Each example is a sample project with its teams and roster, paired with the BIX draft Bayani should suggest.
-- **Generated by code from BIX:** take a good project built from an `InitiativeTemplate` and break it on purpose (remove a step, merge two tasks, wrong team, drop a dependency). Each break is an exact label.
+- **v0 is seeded by us (decided 2026-11-11), not pilot users.** About 30 sample projects in BIX, several of each kind (fun run, feeding program, tutoring, cleanup, conference), including steps added late and steps that slipped. They are also the **starter Practices** a group's first project compares against.
+- **Generated by code from BIX:** from each set of sample projects of one kind, code builds the Practices and their figures (Core `computeObserved`), then makes questions with exact answers: reword a step and ask if it matches its Practice, drop a usual step, swap a step into another kind of project, add a one-off.
 - **The test set is written first and kept apart.** Never trained on; ideally partly written by someone who didn't write the training data, so scores aren't inflated by our own phrasing.
 - **English only (decided 2026-11-11).** Training and test data are in English; coordinators use English. No Filipino or Taglish work for Bayani-1.
 - **Synthetic variants** (more phrasings of the same projects) come from an open model, not a frontier API, so the whole lineage stays open.
