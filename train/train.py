@@ -24,7 +24,7 @@ import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, get_cosine_schedule_with_warmup
 from peft import LoraConfig, get_peft_model
 
-MODELS = os.environ.get("BAYANI_MODELS", "allenai/OLMo-2-0425-1B-Instruct").split(",")
+MODELS = os.environ.get("BAYANI_MODELS", "HuggingFaceTB/SmolLM2-1.7B-Instruct").split(",")
 EPOCHS, LR, BATCH, ACCUM, MAXLEN = 2, 2e-4, 8, 2, 640
 SYSTEM = ("You help a volunteer group remember how its projects usually go. Read the project details and answer the "
           "question with exactly one of the allowed answers, and nothing else.")
@@ -166,10 +166,27 @@ def export(model, tok, name):
     run(sys.executable, "-m", "pip", "install", "-q", "/tmp/llama.cpp/gguf-py", "sentencepiece", "protobuf")
     run(sys.executable, "/tmp/llama.cpp/convert_hf_to_gguf.py", merged, "--outfile", "/tmp/bayani-f16.gguf", "--outtype", "f16")
     run("cmake", "-S", "/tmp/llama.cpp", "-B", "/tmp/llama.cpp/build", "-DGGML_NATIVE=OFF", "-DLLAMA_CURL=OFF", "-DCMAKE_BUILD_TYPE=Release")
-    run("cmake", "--build", "/tmp/llama.cpp/build", "--target", "llama-quantize", "-j", str(os.cpu_count() or 2))
+    run("cmake", "--build", "/tmp/llama.cpp/build", "--target", "llama-quantize", "llama-server", "-j", str(os.cpu_count() or 2))
     q = glob.glob("/tmp/llama.cpp/build/**/llama-quantize", recursive=True)[0]
     run(q, "/tmp/bayani-f16.gguf", f"{OUT}/bayani-1-1b-q4_k_m.gguf", "Q4_K_M")
     print("exported", os.path.getsize(f"{OUT}/bayani-1-1b-q4_k_m.gguf") // 1_000_000, "MB", flush=True)
+    # Prove the exported file works in llama.cpp before anyone downloads it.
+    import urllib.request
+    srv = subprocess.Popen([glob.glob("/tmp/llama.cpp/build/**/llama-server", recursive=True)[0], "-m", f"{OUT}/bayani-1-1b-q4_k_m.gguf", "--port", "8099", "-c", "2048"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    try:
+        for _ in range(240):
+            try: urllib.request.urlopen("http://127.0.0.1:8099/health", timeout=1); break
+            except Exception: time.sleep(0.5)
+        xs = [e for e in test if isinstance(e["answers"], list)][:60]; ok = 0
+        for e in xs:
+            body = {"messages": [{"role": "system", "content": SYSTEM}, {"role": "user", "content": e["text"]}], "temperature": 0, "max_tokens": 8,
+                    "grammar": "root ::= " + " | ".join(json.dumps(a) for a in e["answers"])}
+            r = json.load(urllib.request.urlopen(urllib.request.Request("http://127.0.0.1:8099/v1/chat/completions", json.dumps(body).encode(), {"Content-Type": "application/json"})))
+            ok += r["choices"][0]["message"]["content"].strip() == e["answer"]
+        results["models"][name]["llamaCppCheck60"] = round(ok / len(xs), 3)
+        print("llama.cpp Q4 file, 60 questions:", round(ok / len(xs), 3), flush=True)
+    finally:
+        srv.terminate()
 
 
 results = {"train": len(train), "test": len(test), "epochs": EPOCHS, "lr": LR, "models": {}}
