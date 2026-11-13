@@ -1,0 +1,140 @@
+{
+ "train": 2425,
+ "test": 254,
+ "epochs": 2,
+ "lr": 0.0002,
+ "models": {
+  "allenai/OLMo-2-0425-1B-Instruct": {
+   "perQuestion": {
+    "applies": {
+     "n": 40,
+     "accuracy": 1.0
+    },
+    "general-title": {
+     "n": 41,
+     "accuracy": 0.537,
+     "wordF1": 0.775
+    },
+    "one-off": {
+     "n": 9,
+     "accuracy": 1.0
+    },
+    "same-practice": {
+     "n": 82,
+     "accuracy": 0.902
+    },
+    "which-practice": {
+     "n": 41,
+     "accuracy": 0.902
+    },
+    "which-team": {
+     "n": 41,
+     "accuracy": 0.927
+    }
+   },
+   "fixedAnswerAccuracy": 0.93,
+   "calibrationError": 0.05,
+   "titleSamples": [
+    {
+     "got": "Get the barangay permit",
+     "want": "Get the barangay permit"
+    },
+    {
+     "got": "Arrange the marshals",
+     "want": "Get the LGU traffic clearance"
+    },
+    {
+     "got": "Map the race route",
+     "want": "Map the route"
+    },
+    {
+     "got": "Call for sponsors",
+     "want": "Call for sponsors"
+    },
+    {
+     "got": "Collect sponsor logos",
+     "want": "Collect sponsor logos"
+    },
+    {
+     "got": "Design the race shirt",
+     "want": "Design the race shirt"
+    },
+    {
+     "got": "Order race bibs",
+     "want": "Print race bibs"
+    },
+    {
+     "got": "Recruit route marshals",
+     "want": "Recruit route marshals"
+    }
+   ],
+   "seconds": 773
+  },
+  "HuggingFaceTB/SmolLM2-360M-Instruct": {
+   "perQuestion": {
+    "applies": {
+     "n": 40,
+     "accuracy": 0.75
+    },
+    "general-title": {
+     "n": 41,
+     "accuracy": 0.561,
+     "wordF1": 0.692
+    },
+    "one-off": {
+     "n": 9,
+     "accuracy": 0.667
+    },
+    "same-practice": {
+     "n": 82,
+     "accuracy": 0.573
+    },
+    "which-practice": {
+     "n": 41,
+     "accuracy": 0.634
+    },
+    "which-team": {
+     "n": 41,
+     "accuracy": 0.366
+    }
+   },
+   "fixedAnswerAccuracy": 0.582,
+   "calibrationError": 0.07,
+   "titleSamples": [
+    {
+     "got": "Clear the road",
+     "want": "Get the barangay permit"
+    },
+    {
+     "got": "Arrange traffic marshals",
+     "want": "Get the LGU traffic clearance"
+    },
+    {
+     "got": "Book the venue",
+     "want": "Map the route"
+    },
+    {
+     "got": "Call for sponsors",
+     "want": "Call for sponsors"
+    },
+    {
+     "got": "Collect sponsor logos",
+     "want": "Collect sponsor logos"
+    },
+    {
+     "got": "Design the race route",
+     "want": "Design the race shirt"
+    },
+    {
+     "got": "Get race marshals",
+     "want": "Print race bibs"
+    },
+    {
+     "got": "Arrange first aid",
+     "want": "Recruit route marshals"
+    }
+   ],
+   "seconds": 490
+  }
+ }
+}
