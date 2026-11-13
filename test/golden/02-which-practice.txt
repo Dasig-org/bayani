@@ -1,0 +1,12 @@
+Project: "Fun run 2027" (fun run), starts in 30 days
+Step S1: "Letter to Kapitan for the road closure" (team T1 Logistics, under "Permits and clearances")
+Known steps:
+- P1 "Get the barangay permit" (usually Logistics, in 3 of 3 past projects, added late once)
+- P2 "Book the venue" (usually Logistics, in 3 of 3 past projects)
+- P3 "Set up water stations" (usually Logistics, in 3 of 3 past projects)
+- P4 "Book a shuttle" (usually Logistics, in 1 of 3 past projects)
+Question: Which known step is S1? Answer P1, P2, P3, P4, none.
+
+# answers: P1 | P2 | P3 | P4 | none
+# labels: S1=Task/kapitan T1=Team/logistics P1=Practice/permit P2=Practice/venue P3=Practice/water P4=Practice/shuttle
+# tokens: 133

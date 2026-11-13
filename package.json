@@ -1,0 +1,27 @@
+{
+  "name": "@bayanihan/bayani",
+  "version": "0.1.0",
+  "description": "Bayani: the small language model of Bayanihan Intelligence. This package builds what Bayani reads (the context pack) from BIX records and maps its answers back. The model itself is in development.",
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "verify": "npm run typecheck && npm test",
+    "golden": "UPDATE_GOLDEN=1 vitest run test/pack.test.ts"
+  },
+  "dependencies": {
+    "@bayanihan/core": "file:../bayanihan/packages/core"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "typescript": "^5.6.0",
+    "vitest": "^3.2.4"
+  },
+  "author": "Dasig Inc. <hello@dasig.org>",
+  "homepage": "https://github.com/Dasig-org/bayani#readme",
+  "repository": { "type": "git", "url": "git+https://github.com/Dasig-org/bayani.git" },
+  "files": ["src", "docs", "README.md"],
+  "exports": { ".": "./src/index.ts", "./package.json": "./package.json" }
+}

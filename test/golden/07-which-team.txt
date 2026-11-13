@@ -1,0 +1,8 @@
+Project: "Fun run 2027" (fun run), starts in 30 days
+Teams: T1 Design, T2 Finance, T3 Logistics, T4 Program, T5 Sponsors
+Step S1: "Find a sound system for the stage"
+Question: Which team should own S1? Answer T1, T2, T3, T4, T5, none.
+
+# answers: T1 | T2 | T3 | T4 | T5 | none
+# labels: T1=Team/design T2=Team/finance T3=Team/logistics T4=Team/program T5=Team/sponsors S1=Task/unassigned
+# tokens: 59

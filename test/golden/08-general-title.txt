@@ -1,0 +1,7 @@
+Step S1: "Book the Lahug covered court"
+Team: Logistics
+Question: Write a short general name for this kind of step, as a group would reuse it next time: no names of people, places or dates, at most 60 characters.
+
+# answers: text, at most 60 characters
+# labels: S1=Task/venue
+# tokens: 53

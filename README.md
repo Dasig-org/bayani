@@ -79,4 +79,17 @@ Who to ask stays a rule. Figures are never set by the model (BIX rules 21, 23).
 
 Per question: accuracy, and whether its probabilities match how often it's right. Baselines: off-the-shelf open models with the grammar, and Jev or a frontier model offline. The task eval is the headline.
 
-**Coming in this folder:** the evaluation harness, the seeded test set, the generator for broken-on-purpose projects, and benchmark results.
+## In this repository
+
+| Path | What |
+|---|---|
+| `docs/CONTEXT_PACK.md` | What Bayani reads for each question, and the rules for building it |
+| `src/pack.ts` | Builds the context pack from BIX records (only what the person can see) and decodes Bayani's answer |
+| `src/shortlist.ts` | Picks the known steps to compare a new step against, by shared words |
+| `test/golden/` | Golden examples: fixed records and the exact pack they produce. Regenerate only with `npm run golden` |
+
+Setup: clone `bix`, `bayanihan` and `bayani` side by side, run `npm install` in `bayanihan/` and here, then
+`npm run verify`.
+
+**Coming next:** the sample projects (English, invented) that double as starter Practices, the generator that turns
+them into questions with exact answers, the evaluation harness, and baseline results.

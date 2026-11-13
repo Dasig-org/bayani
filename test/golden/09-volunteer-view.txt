@@ -1,0 +1,10 @@
+Project: "Fun run 2027" (fun run), starts in 30 days
+Step S1: "Letter to Kapitan for the road closure" (team T1 Logistics, under "Permits and clearances")
+Known steps:
+- (none)
+Question: Which known step is S1? Answer none.
+
+# answers: none
+# labels: S1=Task/kapitan T1=Team/logistics
+# tokens: 56
+# needs model: no

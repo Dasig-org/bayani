@@ -1,0 +1,10 @@
+Project: "Fun run 2026" (fun run), finished
+Step S1: "Book a shuttle from the mall" (no team)
+Closest known steps:
+- P1 "Book a shuttle" (usually Logistics, in 1 of 3 past projects)
+- P2 "Book the venue" (usually Logistics, in 3 of 3 past projects)
+Question: Was S1 needed only this once, so not worth keeping for next time? Answer yes or no.
+
+# answers: yes | no
+# labels: S1=Task/shuttle P1=Practice/shuttle P2=Practice/venue
+# tokens: 86

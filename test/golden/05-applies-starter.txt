@@ -1,0 +1,9 @@
+Project: "Our first coastal cleanup" (coastal cleanup), starts in 15 days
+Teams: T1 Beach crew
+Steps so far: 0
+Usual step P1 "Bring trash bags and gloves" (usually Beach crew, common for projects like this)
+Question: Does P1 belong in this project? Answer yes or no.
+
+# answers: yes | no
+# labels: T1=Team/beach P1=Practice/bags
+# tokens: 67

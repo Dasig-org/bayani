@@ -1,0 +1,9 @@
+Project: "Fun run 2027" (fun run), starts in 30 days
+Teams: T1 Design, T2 Finance, T3 Logistics, T4 Program, T5 Sponsors
+Steps so far: 8 ("Book the Lahug covered court", "Buy water for the marshals", "Confirm sponsor logos", "Find a sound system for the stage", "Letter to Kapitan for the road closure", "Permits and clearances", "Print race bibs", "Water stations at km 3 and km 7")
+Usual step P1 "Thank the barangay" (usually Program, in 2 of 3 past projects, usually 5 days after the start)
+Question: Does P1 belong in this project? Answer yes or no.
+
+# answers: yes | no
+# labels: T1=Team/design T2=Team/finance T3=Team/logistics T4=Team/program T5=Team/sponsors P1=Practice/thanks
+# tokens: 139

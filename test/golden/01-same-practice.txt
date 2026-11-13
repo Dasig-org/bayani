@@ -1,0 +1,8 @@
+Project: "Fun run 2027" (fun run), starts in 30 days
+Step S1: "Letter to Kapitan for the road closure" (team T1 Logistics, under "Permits and clearances")
+Known step P1 "Get the barangay permit" (usually Logistics, in 3 of 3 past projects, added late once)
+Question: Is S1 the same kind of step as P1? Answer yes or no.
+
+# answers: yes | no
+# labels: S1=Task/kapitan T1=Team/logistics P1=Practice/permit
+# tokens: 80
