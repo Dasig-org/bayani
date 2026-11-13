@@ -1,0 +1,16 @@
+# Bayani-1 for Ollama. From the repo root, after downloading the GGUF into models/:
+#   ollama create bayani-1 -f train/Modelfile
+#   ollama run bayani-1 "$(head -1 data/out/test.jsonl | python3 -c 'import json,sys;print(json.load(sys.stdin)["text"])')"
+# The template is the exact format Bayani was trained with (OLMo-2's chat format).
+FROM ../models/bayani-1-1b-q4_k_m.gguf
+TEMPLATE """<|endoftext|><|system|>
+{{ .System }}
+<|user|>
+{{ .Prompt }}
+<|assistant|>
+"""
+SYSTEM """You help a volunteer group remember how its projects usually go. Read the project details and answer the question with exactly one of the allowed answers, and nothing else."""
+PARAMETER temperature 0
+PARAMETER num_ctx 2048
+PARAMETER stop "<|endoftext|>"
+PARAMETER stop "<|user|>"
