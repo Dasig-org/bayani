@@ -143,8 +143,22 @@ def export(model, tok, name):
     """Merged model -> GGUF (f16) -> Q4_K_M, with llama.cpp. Output: /kaggle/working/bayani-1-1b-q4_k_m.gguf"""
     import shutil
     from huggingface_hub import snapshot_download
-    merged = "/tmp/bayani-merged"
+    merged = f"{OUT}/bayani-merged"
     model.save_pretrained(merged, safe_serialization=True)
+    # Prove the saved files hold the trained weights: reload from disk and score. If not, write the weights directly.
+    def disk_score():
+        m2 = AutoModelForCausalLM.from_pretrained(merged, torch_dtype=torch.float16).to(device).eval()
+        sc = evaluate_subset(m2, tok, 60); del m2; torch.cuda.empty_cache(); return sc
+    sc = disk_score()
+    print("reloaded from disk, 60 questions:", sc, flush=True)
+    if sc < 0.8:
+        from safetensors.torch import save_file
+        for f in glob.glob(f"{merged}/*.safetensors") + glob.glob(f"{merged}/*.index.json"): os.remove(f)
+        save_file({k: v.detach().contiguous().cpu() for k, v in model.state_dict().items()}, f"{merged}/model.safetensors", metadata={"format": "pt"})
+        sc = disk_score()
+        print("after writing weights directly:", sc, flush=True)
+    results["models"][name]["savedCheck60"] = sc
+    json.dump(results, open(f"{OUT}/trained.json", "w"), indent=1)
     src = snapshot_download(name, allow_patterns=["tokenizer*", "special_tokens_map.json", "vocab*", "merges*", "generation_config.json"])
     for f in glob.glob(f"{src}/*"): shutil.copy(f, merged)
     run = lambda *a: subprocess.run(list(a), check=True)

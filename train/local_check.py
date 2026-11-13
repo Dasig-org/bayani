@@ -17,7 +17,7 @@ random.Random(1).shuffle(test)
 test = test[:n]
 
 PORT = 8099
-srv = subprocess.Popen(["llama-server", "-m", model, "--port", str(PORT), "-c", "2048", "--log-disable"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+srv = subprocess.Popen(["llama-server", "-m", model, "--port", str(PORT), "-c", "2048", "--log-disable", *__import__("os").environ.get("LLAMA_ARGS", "").split()], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 try:
     for _ in range(120):
         try:
