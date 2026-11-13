@@ -13,6 +13,12 @@ try:
 except OSError as ex:
     raise SystemExit(f"No internet in this notebook ({ex}). Verify your phone in Kaggle Settings and turn Internet on.")
 subprocess.run([sys.executable, "-m", "pip", "install", "-q", "peft>=0.13"], check=False)
+# Kaggle's image ships an old torchao that new peft refuses to load; peft works without it.
+subprocess.run([sys.executable, "-m", "pip", "uninstall", "-y", "-q", "torchao"], check=False)
+try:
+    import peft  # noqa: F401  fail in seconds, not after downloading models
+except Exception as ex:
+    raise SystemExit(f"peft didn't load: {ex!r}")
 
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, get_cosine_schedule_with_warmup
