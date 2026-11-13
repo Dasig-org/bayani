@@ -86,10 +86,11 @@ Per question: accuracy, and whether its probabilities match how often it's right
 | `docs/CONTEXT_PACK.md` | What Bayani reads for each question, and the rules for building it |
 | `src/pack.ts` | Builds the context pack from BIX records (only what the person can see) and decodes Bayani's answer |
 | `src/shortlist.ts` | Picks the known steps to compare a new step against, by shared words |
+| `data/playbooks.ts`, `data/generate.ts` | The v0 data: six kinds of project, built into BIX projects and questions (`docs/DATA.md`) |
+| `data/out/` | Generated `train.jsonl`, `test.jsonl`, starter Practices; regenerate with `npm run data` |
 | `test/golden/` | Golden examples: fixed records and the exact pack they produce. Regenerate only with `npm run golden` |
 
 Setup: clone `bix`, `bayanihan` and `bayani` side by side, run `npm install` in `bayanihan/` and here, then
 `npm run verify`.
 
-**Coming next:** the sample projects (English, invented) that double as starter Practices, the generator that turns
-them into questions with exact answers, the evaluation harness, and baseline results.
+**Coming next:** the evaluation harness and baseline results (B21).
