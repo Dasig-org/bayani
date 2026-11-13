@@ -23,15 +23,20 @@ if not adapter:
     raise SystemExit("adapter not found: attach the bayani-train notebook's output")
 W = "/kaggle/working"
 merged = "/tmp/bayani-merged"
-tok = AutoTokenizer.from_pretrained(adapter)
 model = AutoModelForCausalLM.from_pretrained(BASE, torch_dtype=torch.float16)
 model = PeftModel.from_pretrained(model, adapter).merge_and_unload()
 model.save_pretrained(merged, safe_serialization=True)
-tok.save_pretrained(merged)
+# The tokenizer isn't changed by training: copy the original files, which older converters can read.
+from huggingface_hub import snapshot_download
+import shutil
+src = snapshot_download(BASE, allow_patterns=["tokenizer*", "special_tokens_map.json", "vocab*", "merges*", "generation_config.json"])
+for f in glob.glob(f"{src}/*"):
+    shutil.copy(f, merged)
 print("merged", flush=True)
 
 run("git", "clone", "-q", "--depth", "1", "https://github.com/ggml-org/llama.cpp", "/tmp/llama.cpp")
-run(sys.executable, "-m", "pip", "install", "-q", "-r", "/tmp/llama.cpp/requirements/requirements-convert_hf_to_gguf.txt")
+# Only what the converter needs; its requirements file would downgrade transformers.
+run(sys.executable, "-m", "pip", "install", "-q", "/tmp/llama.cpp/gguf-py", "sentencepiece", "protobuf")
 f16 = "/tmp/bayani-f16.gguf"
 run(sys.executable, "/tmp/llama.cpp/convert_hf_to_gguf.py", merged, "--outfile", f16, "--outtype", "f16")
 run("cmake", "-S", "/tmp/llama.cpp", "-B", "/tmp/llama.cpp/build", "-DGGML_NATIVE=OFF", "-DLLAMA_CURL=OFF", "-DCMAKE_BUILD_TYPE=Release")
