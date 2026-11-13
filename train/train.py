@@ -24,7 +24,7 @@ import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, get_cosine_schedule_with_warmup
 from peft import LoraConfig, get_peft_model
 
-MODELS = os.environ.get("BAYANI_MODELS", "allenai/OLMo-2-0425-1B-Instruct,HuggingFaceTB/SmolLM2-360M-Instruct").split(",")
+MODELS = os.environ.get("BAYANI_MODELS", "allenai/OLMo-2-0425-1B-Instruct").split(",")
 EPOCHS, LR, BATCH, ACCUM, MAXLEN = 2, 2e-4, 8, 2, 640
 SYSTEM = ("You help a volunteer group remember how its projects usually go. Read the project details and answer the "
           "question with exactly one of the allowed answers, and nothing else.")
@@ -131,6 +131,33 @@ def evaluate(model, tok):
     return {"perQuestion": per, "fixedAnswerAccuracy": round(sum(r["ok"] for r in fixed) / len(fixed), 3), "calibrationError": round(ece, 3), "titleSamples": samples}
 
 
+def evaluate_subset(model, tok, n):
+    xs = [e for e in test if isinstance(e["answers"], list)][:n]
+    ok = 0
+    for e in xs:
+        ps = choose(model, tok, e["text"], e["answers"]); ok += e["answers"][max(range(len(ps)), key=lambda k: ps[k])] == e["answer"]
+    return round(ok / len(xs), 3)
+
+
+def export(model, tok, name):
+    """Merged model -> GGUF (f16) -> Q4_K_M, with llama.cpp. Output: /kaggle/working/bayani-1-1b-q4_k_m.gguf"""
+    import shutil
+    from huggingface_hub import snapshot_download
+    merged = "/tmp/bayani-merged"
+    model.save_pretrained(merged, safe_serialization=True)
+    src = snapshot_download(name, allow_patterns=["tokenizer*", "special_tokens_map.json", "vocab*", "merges*", "generation_config.json"])
+    for f in glob.glob(f"{src}/*"): shutil.copy(f, merged)
+    run = lambda *a: subprocess.run(list(a), check=True)
+    run("git", "clone", "-q", "--depth", "1", "https://github.com/ggml-org/llama.cpp", "/tmp/llama.cpp")
+    run(sys.executable, "-m", "pip", "install", "-q", "/tmp/llama.cpp/gguf-py", "sentencepiece", "protobuf")
+    run(sys.executable, "/tmp/llama.cpp/convert_hf_to_gguf.py", merged, "--outfile", "/tmp/bayani-f16.gguf", "--outtype", "f16")
+    run("cmake", "-S", "/tmp/llama.cpp", "-B", "/tmp/llama.cpp/build", "-DGGML_NATIVE=OFF", "-DLLAMA_CURL=OFF", "-DCMAKE_BUILD_TYPE=Release")
+    run("cmake", "--build", "/tmp/llama.cpp/build", "--target", "llama-quantize", "-j", str(os.cpu_count() or 2))
+    q = glob.glob("/tmp/llama.cpp/build/**/llama-quantize", recursive=True)[0]
+    run(q, "/tmp/bayani-f16.gguf", f"{OUT}/bayani-1-1b-q4_k_m.gguf", "Q4_K_M")
+    print("exported", os.path.getsize(f"{OUT}/bayani-1-1b-q4_k_m.gguf") // 1_000_000, "MB", flush=True)
+
+
 results = {"train": len(train), "test": len(test), "epochs": EPOCHS, "lr": LR, "models": {}}
 for name in MODELS:
     t0 = time.time()
@@ -145,9 +172,15 @@ for name in MODELS:
         print(f"training {name}", flush=True)
         fit(model, tok)
         res = evaluate(model, tok)
-        short = name.split("/")[-1]
-        model.save_pretrained(f"{OUT}/adapter-{short}"); tok.save_pretrained(f"{OUT}/adapter-{short}")
         results["models"][name] = {**res, "seconds": round(time.time() - t0)}
+        # Saving the adapter alone came out empty with this peft/transformers pair (938 bytes, 2026-11-14), so merge it
+        # into the model here, check the merged model still scores the same, and export that.
+        model = model.merge_and_unload()
+        for p in model.parameters(): p.data = p.data.half()
+        check = evaluate_subset(model, tok, 60)
+        results["models"][name]["mergedCheck60"] = check
+        print("merged model, first 60 fixed-answer test questions:", check, flush=True)
+        export(model, tok, name)
         del model; torch.cuda.empty_cache()
     except Exception as ex:
         results["models"][name] = {"error": repr(ex)[:400]}

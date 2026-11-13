@@ -27,20 +27,27 @@ try:
 
     def ask(e):
         grammar = ("root ::= " + " | ".join(json.dumps(a) for a in e["answers"])) if isinstance(e["answers"], list) else None
-        body = {"messages": [{"role": "system", "content": SYSTEM}, {"role": "user", "content": e["text"]}], "temperature": 0, "max_tokens": 24}
+        # The exact prompt format the model was trained with (OLMo-2's chat format), not the server's template guess.
+        prompt = f"<|endoftext|><|system|>\n{SYSTEM}\n<|user|>\n{e['text']}\n<|assistant|>\n"
+        body = {"prompt": prompt, "temperature": 0, "n_predict": 24, "stop": ["<|endoftext|>", "\n"]}
         if grammar: body["grammar"] = grammar
-        req = urllib.request.Request(f"http://127.0.0.1:{PORT}/v1/chat/completions", json.dumps(body).encode(), {"Content-Type": "application/json"})
-        return json.load(urllib.request.urlopen(req, timeout=120))["choices"][0]["message"]["content"].strip().strip('"')
+        req = urllib.request.Request(f"http://127.0.0.1:{PORT}/completion", json.dumps(body).encode(), {"Content-Type": "application/json"})
+        return json.load(urllib.request.urlopen(req, timeout=120))["content"].strip().strip('"')
 
     right, t0, shown = 0, time.time(), 0
+    tally = {}
     for e in test:
         got = ask(e)
         ok = got.lower() == e["answer"].lower()
         right += ok
-        if shown < 6:
+        t = tally.setdefault(e["question"], [0, 0, []]); t[0] += ok; t[1] += 1
+        if not ok and len(t[2]) < 3: t[2].append(f"{got!r} (expected {e['answer']!r})")
+        if shown < int(__import__('os').environ.get('SHOW', '0')):
             print(f"\n{e['text']}\n  Bayani: {got}   expected: {e['answer']}   {'right' if ok else 'wrong'}")
             shown += 1
     secs = time.time() - t0
+    for q, (r, c, bad) in sorted(tally.items()):
+        print(f"  {q}: {r}/{c}  {'; '.join(bad)}")
     print(f"\n{right}/{len(test)} right ({right / len(test):.0%}), {secs / len(test):.2f} s per question on this Mac")
 finally:
     srv.terminate()
