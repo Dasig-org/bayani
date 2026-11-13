@@ -73,9 +73,38 @@ def score(name):
         else:
             got = generate(model, tok, e["text"])
             rows.append({"q": e["question"], "ok": norm(got) == norm(e["answer"]), "conf": None, "got": got})
+    try:
+        hs = hellaswag(model, tok)
+    except Exception as ex:
+        hs = f"error: {repr(ex)[:120]}"
     del model
     torch.cuda.empty_cache()
-    return rows, time.time() - t0
+    return rows, time.time() - t0, hs
+
+
+HELLASWAG_N = int(os.environ.get("BAYANI_HELLASWAG_N", "300"))
+_hs = None
+
+
+def hellaswag(model, tok):
+    """General common sense (HellaSwag, MIT licence): pick the likeliest ending; 300 fixed validation items."""
+    global _hs
+    if _hs is None:
+        from datasets import load_dataset
+        _hs = load_dataset("Rowan/hellaswag", split="validation").shuffle(seed=7).select(range(HELLASWAG_N))
+    right = 0
+    for x in _hs:
+        ctx = tok(x["ctx"], add_special_tokens=False).input_ids
+        best, pick = -1e9, -1
+        for i, end in enumerate(x["endings"]):
+            e = tok(" " + end, add_special_tokens=False).input_ids
+            ids = torch.tensor([ctx + e], device=device)
+            with torch.no_grad():
+                lp = torch.log_softmax(model(ids).logits[0, len(ctx) - 1:-1].float(), dim=-1)
+            s_ = lp.gather(1, torch.tensor(e, device=device).unsqueeze(1)).sum().item() / max(len(end), 1)
+            if s_ > best: best, pick = s_, i
+        right += pick == int(x["label"])
+    return round(right / len(_hs), 3)
 
 
 def summarise(rows):
@@ -113,8 +142,8 @@ results = {"testExamples": len(examples), "device": device, "models": {}}
 results["models"]["(rules only: most common answer, or top of the shortlist)"] = summarise(majority())
 for name in MODELS:
     try:
-        rows, secs = score(name)
-        results["models"][name] = {**summarise(rows), "seconds": round(secs)}
+        rows, secs, hs = score(name)
+        results["models"][name] = {**summarise(rows), "hellaswag": hs, "seconds": round(secs)}
     except Exception as ex:  # one model failing shouldn't lose the others
         results["models"][name] = {"error": repr(ex)[:300]}
     print(json.dumps({name: results["models"][name]}, indent=1), flush=True)
@@ -124,3 +153,4 @@ print("\nquestion".ljust(18) + "".join(n.split("/")[-1][:22].ljust(24) for n in 
 qs = sorted({e["question"] for e in examples})
 for q in qs:
     print(q.ljust(18) + "".join(str(m.get("perQuestion", {}).get(q, {}).get("accuracy", "-")).ljust(24) for m in results["models"].values()))
+print("hellaswag".ljust(18) + "".join(str(m.get("hellaswag", "-")).ljust(24) for m in results["models"].values()))
