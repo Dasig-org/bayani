@@ -45,7 +45,9 @@ export type GroupData = { records: BixResource[]; examples: Example[]; shortlist
 export function buildGroup(pb: Playbook, groupName: string, split: "train" | "test"): GroupData {
   const r = rng(`${split}:${pb.kind}:${groupName}`);
   const g = slug(groupName), org = `Organization/${g}`, officer = `Person/${g}-officer`;
-  const wordings = (st: Playbook["steps"][number]) => (split === "train" ? st.train : st.test);
+  // Training adds light variations of its own wordings (case, small additions); the test set keeps its wordings as written.
+  const vary = (w: string) => [w, w.toLowerCase(), `${w} (${pb.label})`, `Need to: ${w.charAt(0).toLowerCase()}${w.slice(1)}`, `${w} ASAP`];
+  const wordings = (st: Playbook["steps"][number]) => (split === "train" ? st.train.flatMap(vary) : st.test);
   const records: BixResource[] = [
     { resourceType: "Organization", id: g, meta: { version: 1 }, name: groupName },
     { resourceType: "Role", id: `${g}-officer`, meta: { version: 1 }, person: R(officer), organization: R(org), code: { system: "bayanihan:role", code: "officer" }, status: "active" },
@@ -163,10 +165,15 @@ export function buildGroup(pb: Playbook, groupName: string, split: "train" | "te
   return { records: ids.records, examples, shortlistMisses: misses, shortlistTries: tries, projects: initiatives.length };
 }
 
+/** Invented extra group names for training, so the model sees many groups, not two. Never used in the test set. */
+const EXTRA = ["Bagong Pag-asa", "Tambayan", "Sinag", "Alon", "Liwanag", "Tulay", "Ugnayan", "Bayanihan Circle", "Kapatiran", "Daluyong", "Silangan", "Habagat"];
+export const TRAIN_GROUPS_PER_KIND = 10;
+
 export function buildAll() {
   const out = { train: [] as Example[], test: [] as Example[], projects: 0, shortlistMisses: 0, shortlistTries: 0, groups: 0 };
   for (const pb of PLAYBOOKS) {
-    const runs: [string, "train" | "test"][] = [...pb.groups.train.map((n) => [n, "train"] as [string, "train"]), [pb.groups.test, "test"]];
+    const extra = EXTRA.slice(0, Math.max(0, TRAIN_GROUPS_PER_KIND - pb.groups.train.length)).map((n) => `${n} ${pb.label} team`);
+    const runs: [string, "train" | "test"][] = [...[...pb.groups.train, ...extra].map((n) => [n, "train"] as [string, "train"]), [pb.groups.test, "test"]];
     for (const [name, split] of runs) {
       const d = buildGroup(pb, name, split);
       out[split].push(...d.examples);

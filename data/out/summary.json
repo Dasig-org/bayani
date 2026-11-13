@@ -1,32 +1,32 @@
 {
- "projects": 72,
- "groups": 18,
- "train": 485,
+ "projects": 264,
+ "groups": 66,
+ "train": 2425,
  "test": 254,
- "shortlistRecall": 1,
+ "shortlistRecall": 0.99,
  "byQuestion": {
   "same-practice": [
-   152,
+   760,
    82
   ],
   "which-practice": [
-   77,
+   385,
    41
   ],
   "applies": [
-   83,
+   418,
    40
   ],
   "one-off": [
-   20,
+   93,
    9
   ],
   "which-team": [
-   77,
+   389,
    41
   ],
   "general-title": [
-   76,
+   380,
    41
   ]
  }
