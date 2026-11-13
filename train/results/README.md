@@ -42,3 +42,14 @@ matches how often it's right. SmolLM2-360M barely moved: too small for this, at 
 steps as training, and its wordings are tidy. "One-off?" has only 9 questions. These scores show the model learned the
 task on this data, not that it works on a real group's project yet. Next checks: a kind of project left out of
 training entirely, messier wordings, and a real, consented project.
+
+## SmolLM2-1.7B and the export bug, 2026-11-14
+
+SmolLM2-1.7B trained the same way: **0.96** on fixed-answer questions (calibration error 0.04); 0.95 after merging and
+after reloading from disk. OLMo-2-1B's best run: 0.96, and 0.967 from disk.
+
+**Open bug: the llama.cpp (GGUF) file loses the training.** Converted with `convert_hf_to_gguf.py`, both models
+score near or below the untrained level in llama.cpp (OLMo-2 0.53 at f16 and Q4; SmolLM2-1.7B 0.27 at Q4), on Kaggle
+and on the Mac, and in Ollama. The saved Hugging Face model is fine, so the gap is in conversion or in how the prompt
+reaches llama.cpp. Next: compare llama.cpp's tokens and first-token probabilities with transformers' on the same
+prompt (`train/diagnose_gguf.py` is the starting point).

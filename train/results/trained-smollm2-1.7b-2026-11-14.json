@@ -1,0 +1,77 @@
+{
+ "train": 2425,
+ "test": 254,
+ "epochs": 2,
+ "lr": 0.0002,
+ "models": {
+  "HuggingFaceTB/SmolLM2-1.7B-Instruct": {
+   "perQuestion": {
+    "applies": {
+     "n": 40,
+     "accuracy": 1.0
+    },
+    "general-title": {
+     "n": 41,
+     "accuracy": 0.634,
+     "wordF1": 0.798
+    },
+    "one-off": {
+     "n": 9,
+     "accuracy": 1.0
+    },
+    "same-practice": {
+     "n": 82,
+     "accuracy": 0.976
+    },
+    "which-practice": {
+     "n": 41,
+     "accuracy": 0.927
+    },
+    "which-team": {
+     "n": 41,
+     "accuracy": 0.927
+    }
+   },
+   "fixedAnswerAccuracy": 0.962,
+   "calibrationError": 0.038,
+   "titleSamples": [
+    {
+     "got": "Get the barangay permit",
+     "want": "Get the barangay permit"
+    },
+    {
+     "got": "Arrange traffic control",
+     "want": "Get the LGU traffic clearance"
+    },
+    {
+     "got": "Map the route",
+     "want": "Map the route"
+    },
+    {
+     "got": "Ask for sponsors",
+     "want": "Call for sponsors"
+    },
+    {
+     "got": "Collect sponsor logos",
+     "want": "Collect sponsor logos"
+    },
+    {
+     "got": "Design the race shirt",
+     "want": "Design the race shirt"
+    },
+    {
+     "got": "Print race bibs",
+     "want": "Print race bibs"
+    },
+    {
+     "got": "Arrange the route",
+     "want": "Recruit route marshals"
+    }
+   ],
+   "seconds": 1118,
+   "mergedCheck60": 0.95,
+   "savedCheck60": 0.95,
+   "llamaCppCheck60": 0.267
+  }
+ }
+}
