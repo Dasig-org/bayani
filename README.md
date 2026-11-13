@@ -51,8 +51,9 @@ Who to ask stays a rule. Figures are never set by the model (BIX rules 21, 23).
 2. **Input** is the record being worked on plus a small context pack built under the current user's permissions: teams, related tasks, templates, visible roster nicknames, today's date. Bayani never sees what the user can't.
 3. **No invented IDs.** The model refers to short handles from the context pack (`T3`, `P2`); the package maps them back.
 4. **Output** is validated by Core. Core writes the Provenance, not the model. If it fails, the app shows the manual form; it never retries with a cloud model.
-5. **The app works fully without Bayani.** The model download is optional, Wi-Fi only, behind a flag.
-6. **Product metric:** the share of suggestions a lead accepts unchanged, read from Provenance (confirmed, edited, rejected).
+5. **One memory for the whole group.** Bayani on each phone reads the group's synced `Practice` records; figures are calculated only by the group's server or hub (BIX rule 23), and Bayani sees only what its person may see (rule 26). No per-device learning in v0.
+6. **The app works fully without Bayani.** The model download is optional, Wi-Fi only, behind a flag.
+7. **Product metric:** the share of suggestions a lead accepts unchanged, read from Provenance (confirmed, edited, rejected).
 
 ## Data and training
 
