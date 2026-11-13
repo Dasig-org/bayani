@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "verify": "npm run typecheck && npm test",
     "golden": "UPDATE_GOLDEN=1 vitest run test/pack.test.ts",
-    "data": "WRITE_DATA=1 vitest run test/data.test.ts"
+    "data": "WRITE_DATA=1 vitest run test/data.test.ts",
+    "knowledge": "WRITE_DATA=1 vitest run test/knowledge.test.ts"
   },
   "dependencies": {
     "@bayanihan/core": "file:../bayanihan/packages/core"
@@ -27,11 +28,12 @@
     "url": "git+https://github.com/Dasig-org/bayani.git"
   },
   "files": [
-    "src",
-    "docs",
-    "data/playbooks.ts",
+    "README.md",
     "data/generate.ts",
-    "README.md"
+    "data/playbooks.ts",
+    "docs",
+    "knowledge/facts",
+    "src"
   ],
   "exports": {
     ".": "./src/index.ts",
