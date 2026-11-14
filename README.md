@@ -94,3 +94,15 @@ Setup: clone `bix`, `bayanihan` and `bayani` side by side, run `npm install` in 
 `npm run verify`.
 
 **Coming next:** the evaluation harness and baseline results (B21).
+
+## State at v0 (2026-11-14)
+
+- **Model:** Bayani-1 = SmolLM2-1.7B-Instruct (Q4_K_M GGUF) plus the Bayani LoRA add-on (36 MB), trained on the v0
+  data. Held-out test: 0.96 in training (transformers); 0.90 in llama.cpp; 35/40 in Ollama. Files:
+  `huggingface.co/dasig/bayani-1` (`base-q4_k_m.gguf`, `bayani-1-lora.gguf`). Results: `train/results/README.md`.
+- **Run it locally:** `ollama create bayani-1 -f train/Modelfile` (base + ADAPTER), or `python3 train/local_check.py`.
+- **In the Dasig app (v0.16.0):** Settings → Ask Bayani shows facts from `knowledge/` as written, with sources, on every
+  phone and the web. Android and iPhone can download Bayani-1 (llama.rn, offline); project memory then asks it whether
+  a usual step is already in the plan under other words, and drops that suggestion.
+- **Known limits:** synthetic, tidy English data from six playbooks; not yet tested on a held-out kind of project, messy
+  wordings or a real group's project (B38). Facts are looked up, never generated.
