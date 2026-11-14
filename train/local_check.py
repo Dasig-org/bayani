@@ -28,7 +28,7 @@ try:
     def ask(e):
         grammar = ("root ::= " + " | ".join(json.dumps(a) for a in e["answers"])) if isinstance(e["answers"], list) else None
         # The exact prompt format the model was trained with (OLMo-2's chat format), not the server's template guess.
-        prompt = f"<|endoftext|><|system|>\n{SYSTEM}\n<|user|>\n{e['text']}\n<|assistant|>\n"
+        prompt = f"<|system|>\n{SYSTEM}\n<|user|>\n{e['text']}\n<|assistant|>\n"
         body = {"prompt": prompt, "temperature": 0, "n_predict": 24, "stop": ["<|endoftext|>", "\n"]}
         if grammar: body["grammar"] = grammar
         req = urllib.request.Request(f"http://127.0.0.1:{PORT}/completion", json.dumps(body).encode(), {"Content-Type": "application/json"})
