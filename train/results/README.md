@@ -60,3 +60,5 @@ only 12/30**, while the training run reported 0.95 after reloading the same fold
 converter don't hold the trained weights, despite the in-run check. Next: in the training run, compare a LoRA-targeted
 weight against the base model before and after saving (it must differ), and export the LoRA adapter separately as a
 GGUF adapter (`convert_lora_to_gguf.py`, loaded with `--lora`) so the merge step can't lose it.
+
+**Fixed (2026-11-14).** No merge: the LoRA add-on saved directly (336 tensors, 36 MB) and converted on its own. llama.cpp, 60 questions: base alone 0.27, base + Bayani add-on **0.90**. Ollama (base + ADAPTER, `train/Modelfile`), 40 questions: **35/40**. The merge step was what lost the training.
