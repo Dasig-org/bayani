@@ -140,53 +140,49 @@ def evaluate_subset(model, tok, n):
 
 
 def export(model, tok, name):
-    """Merged model -> GGUF (f16) -> Q4_K_M, with llama.cpp. Output: /kaggle/working/bayani-1-1b-q4_k_m.gguf"""
-    import shutil
+    """No merge (B41): save the trained add-on (LoRA) directly, prove it isn't empty, convert the base model and the
+    add-on to GGUF separately, and score them together in llama.cpp (base + --lora), as Ollama's ADAPTER would."""
+    import urllib.request
     from huggingface_hub import snapshot_download
-    merged = f"{OUT}/bayani-merged"
-    model.save_pretrained(merged, safe_serialization=True)
-    # Prove the saved files hold the trained weights: reload from disk and score. If not, write the weights directly.
-    def disk_score():
-        m2 = AutoModelForCausalLM.from_pretrained(merged, torch_dtype=torch.float16).to(device).eval()
-        sc = evaluate_subset(m2, tok, 60); del m2; torch.cuda.empty_cache(); return sc
-    sc = disk_score()
-    print("reloaded from disk, 60 questions:", sc, flush=True)
-    if sc < 0.8:
-        from safetensors.torch import save_file
-        for f in glob.glob(f"{merged}/*.safetensors") + glob.glob(f"{merged}/*.index.json"): os.remove(f)
-        save_file({k: v.detach().contiguous().cpu() for k, v in model.state_dict().items()}, f"{merged}/model.safetensors", metadata={"format": "pt"})
-        sc = disk_score()
-        print("after writing weights directly:", sc, flush=True)
-    results["models"][name]["savedCheck60"] = sc
-    json.dump(results, open(f"{OUT}/trained.json", "w"), indent=1)
-    src = snapshot_download(name, allow_patterns=["tokenizer*", "special_tokens_map.json", "vocab*", "merges*", "generation_config.json"])
-    for f in glob.glob(f"{src}/*"): shutil.copy(f, merged)
+    from safetensors.torch import save_file
+    ad = f"{OUT}/bayani-lora"; os.makedirs(ad, exist_ok=True)
+    sd = {k.replace(".default", ""): v.detach().half().contiguous().cpu() for k, v in model.state_dict().items() if "lora_" in k}
+    nz = max((v.abs().max().item() for k, v in sd.items() if "lora_B" in k), default=0)
+    print("lora tensors:", len(sd), "max |lora_B|:", nz, flush=True)
+    if not sd or nz == 0:
+        raise SystemExit("the trained add-on is empty: stopping before export")
+    save_file(sd, f"{ad}/adapter_model.safetensors", metadata={"format": "pt"})
+    cfg = {k: (sorted(v) if isinstance(v, set) else v) for k, v in model.peft_config["default"].to_dict().items()}
+    json.dump(cfg, open(f"{ad}/adapter_config.json", "w"), default=str)
+    print("adapter MB:", os.path.getsize(f"{ad}/adapter_model.safetensors") // 1_000_000, flush=True)
+    base = snapshot_download(name)
     run = lambda *a: subprocess.run(list(a), check=True)
     run("git", "clone", "-q", "--depth", "1", "https://github.com/ggml-org/llama.cpp", "/tmp/llama.cpp")
     run(sys.executable, "-m", "pip", "install", "-q", "/tmp/llama.cpp/gguf-py", "sentencepiece", "protobuf")
-    run(sys.executable, "/tmp/llama.cpp/convert_hf_to_gguf.py", merged, "--outfile", "/tmp/bayani-f16.gguf", "--outtype", "f16")
+    run(sys.executable, "/tmp/llama.cpp/convert_hf_to_gguf.py", base, "--outfile", "/tmp/base-f16.gguf", "--outtype", "f16")
+    run(sys.executable, "/tmp/llama.cpp/convert_lora_to_gguf.py", ad, "--base", base, "--outfile", f"{OUT}/bayani-1-lora.gguf", "--outtype", "f16")
     run("cmake", "-S", "/tmp/llama.cpp", "-B", "/tmp/llama.cpp/build", "-DGGML_NATIVE=OFF", "-DLLAMA_CURL=OFF", "-DCMAKE_BUILD_TYPE=Release")
     run("cmake", "--build", "/tmp/llama.cpp/build", "--target", "llama-quantize", "llama-server", "-j", str(os.cpu_count() or 2))
-    q = glob.glob("/tmp/llama.cpp/build/**/llama-quantize", recursive=True)[0]
-    run(q, "/tmp/bayani-f16.gguf", f"{OUT}/bayani-1-1b-q4_k_m.gguf", "Q4_K_M")
-    print("exported", os.path.getsize(f"{OUT}/bayani-1-1b-q4_k_m.gguf") // 1_000_000, "MB", flush=True)
-    # Prove the exported file works in llama.cpp before anyone downloads it.
-    import urllib.request
-    srv = subprocess.Popen([glob.glob("/tmp/llama.cpp/build/**/llama-server", recursive=True)[0], "-m", f"{OUT}/bayani-1-1b-q4_k_m.gguf", "--port", "8099", "-c", "2048"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    try:
-        for _ in range(240):
-            try: urllib.request.urlopen("http://127.0.0.1:8099/health", timeout=1); break
-            except Exception: time.sleep(0.5)
-        xs = [e for e in test if isinstance(e["answers"], list)][:60]; ok = 0
-        for e in xs:
-            body = {"messages": [{"role": "system", "content": SYSTEM}, {"role": "user", "content": e["text"]}], "temperature": 0, "max_tokens": 8,
-                    "grammar": "root ::= " + " | ".join(json.dumps(a) for a in e["answers"])}
-            r = json.load(urllib.request.urlopen(urllib.request.Request("http://127.0.0.1:8099/v1/chat/completions", json.dumps(body).encode(), {"Content-Type": "application/json"})))
-            ok += r["choices"][0]["message"]["content"].strip() == e["answer"]
-        results["models"][name]["llamaCppCheck60"] = round(ok / len(xs), 3)
-        print("llama.cpp Q4 file, 60 questions:", round(ok / len(xs), 3), flush=True)
-    finally:
-        srv.terminate()
+    binary = lambda n: glob.glob(f"/tmp/llama.cpp/build/**/{n}", recursive=True)[0]
+    run(binary("llama-quantize"), "/tmp/base-f16.gguf", f"{OUT}/base-q4_k_m.gguf", "Q4_K_M")
+    for f in ("base-q4_k_m.gguf", "bayani-1-lora.gguf"): print(f, os.path.getsize(f"{OUT}/{f}") // 1_000_000, "MB", flush=True)
+    for label, extra in (("base only", []), ("base + Bayani add-on", ["--lora", f"{OUT}/bayani-1-lora.gguf"])):
+        srv = subprocess.Popen([binary("llama-server"), "-m", f"{OUT}/base-q4_k_m.gguf", *extra, "--port", "8099", "-c", "2048"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        try:
+            for _ in range(240):
+                try: urllib.request.urlopen("http://127.0.0.1:8099/health", timeout=1); break
+                except Exception: time.sleep(0.5)
+            xs = [e for e in test if isinstance(e["answers"], list)][:60]; ok = 0
+            for e in xs:
+                body = {"prompt": tok(prompt(tok, e["text"]), add_special_tokens=False).input_ids, "temperature": 0, "n_predict": 8,
+                        "grammar": "root ::= " + " | ".join(json.dumps(a) for a in e["answers"])}
+                r = json.load(urllib.request.urlopen(urllib.request.Request("http://127.0.0.1:8099/completion", json.dumps(body).encode(), {"Content-Type": "application/json"})))
+                ok += r["content"].strip() == e["answer"]
+            results["models"][name][f"llamaCpp60 {label}"] = round(ok / len(xs), 3)
+            print(f"llama.cpp, {label}, 60 questions:", round(ok / len(xs), 3), flush=True)
+        finally:
+            srv.terminate()
+    json.dump(results, open(f"{OUT}/trained.json", "w"), indent=1)
 
 
 results = {"train": len(train), "test": len(test), "epochs": EPOCHS, "lr": LR, "models": {}}
@@ -204,13 +200,6 @@ for name in MODELS:
         fit(model, tok)
         res = evaluate(model, tok)
         results["models"][name] = {**res, "seconds": round(time.time() - t0)}
-        # Saving the adapter alone came out empty with this peft/transformers pair (938 bytes, 2026-11-14), so merge it
-        # into the model here, check the merged model still scores the same, and export that.
-        model = model.merge_and_unload()
-        for p in model.parameters(): p.data = p.data.half()
-        check = evaluate_subset(model, tok, 60)
-        results["models"][name]["mergedCheck60"] = check
-        print("merged model, first 60 fixed-answer test questions:", check, flush=True)
         export(model, tok, name)
         del model; torch.cuda.empty_cache()
     except Exception as ex:
