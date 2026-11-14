@@ -1,0 +1,71 @@
+{
+ "gguf": "bayani-1-1b-q4_k_m.gguf",
+ "n": 30,
+ "tokensMatch": 30,
+ "idsScore": 8,
+ "textScore": 8,
+ "hfScore": 12,
+ "firstTokenAgree": 21,
+ "examples": [
+  {
+   "answer": "yes",
+   "hf": "no",
+   "llamaIds": "no",
+   "llamaText": "no",
+   "hfTop": "no",
+   "llamaTop": [
+    "no",
+    "yes",
+    "No"
+   ],
+   "hfTokens": 147,
+   "llamaTokens": 147,
+   "firstDiff": null
+  },
+  {
+   "answer": "no",
+   "hf": "no",
+   "llamaIds": "no",
+   "llamaText": "no",
+   "hfTop": "no",
+   "llamaTop": [
+    "no",
+    "yes",
+    "No"
+   ],
+   "hfTokens": 138,
+   "llamaTokens": 138,
+   "firstDiff": null
+  },
+  {
+   "answer": "P1",
+   "hf": "P1",
+   "llamaIds": "none",
+   "llamaText": "none",
+   "hfTop": "P",
+   "llamaTop": [
+    "none",
+    "None",
+    "P"
+   ],
+   "hfTokens": 269,
+   "llamaTokens": 269,
+   "firstDiff": null
+  },
+  {
+   "answer": "T4",
+   "hf": "T1",
+   "llamaIds": "none",
+   "llamaText": "none",
+   "hfTop": "T",
+   "llamaTop": [
+    "none",
+    "T",
+    "None"
+   ],
+   "hfTokens": 142,
+   "llamaTokens": 142,
+   "firstDiff": null
+  }
+ ]
+}

@@ -53,3 +53,10 @@ score near or below the untrained level in llama.cpp (OLMo-2 0.53 at f16 and Q4;
 and on the Mac, and in Ollama. The saved Hugging Face model is fine, so the gap is in conversion or in how the prompt
 reaches llama.cpp. Next: compare llama.cpp's tokens and first-token probabilities with transformers' on the same
 prompt (`train/diagnose_gguf.py` is the starting point).
+
+**B41 finding (2026-11-14).** llama.cpp is faithful: on 30 questions its tokens match transformers' exactly (30/30)
+and its first token mostly agrees (21/30). But **transformers itself, loading the exported `bayani-merged` files, scores
+only 12/30**, while the training run reported 0.95 after reloading the same folder. So the files that reach the
+converter don't hold the trained weights, despite the in-run check. Next: in the training run, compare a LoRA-targeted
+weight against the base model before and after saving (it must differ), and export the LoRA adapter separately as a
+GGUF adapter (`convert_lora_to_gguf.py`, loaded with `--lora`) so the merge step can't lose it.
