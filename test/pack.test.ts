@@ -64,6 +64,15 @@ describe("the pack's guarantees", () => {
     expect(Object.values(vic.labels).every((r) => r !== "Practice/permit")).toBe(true);
   });
 
+  it("with prefiltered records (already filtered by the person's server), uses them as given and gives the same pack", () => {
+    const seen = buildPack({ kind: "which-practice", step: "Task/kapitan" }, { records, viewer: "Person/ana", now: NOW });
+    const given = records.filter((r) => Object.values(seen.labels).includes(`${r.resourceType}/${r.id}`) || r.resourceType !== "Practice");
+    const pre = buildPack({ kind: "which-practice", step: "Task/kapitan" }, { records: given, viewer: "Person/ana", now: NOW, prefiltered: true });
+    expect(pre.text).toBe(seen.text);
+    const vicView = records.filter((r) => r.resourceType !== "Practice");
+    expect(buildPack({ kind: "which-practice", step: "Task/kapitan" }, { records: vicView, viewer: "Person/vic", now: NOW, prefiltered: true }).needsModel).toBe(false);
+  });
+
   it("refuses a question about something the viewer can't see", () => {
     expect(() => buildPack({ kind: "same-practice", step: "Task/bibs", practice: "Practice/bibs" }, { records, viewer: "Person/vic", now: NOW })).toThrow(/can see/);
   });

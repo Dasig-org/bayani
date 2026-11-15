@@ -1,6 +1,6 @@
 # Bayani · the small model of Bayanihan Intelligence
 
-**Bayani does not exist yet.** This folder will hold the work to build it. Never describe it as trained, deployed or benchmarked until it is.
+**Status: Bayani-1 v0 is trained on sample data and runs in the Dasig app, but it hasn't yet been tested on a real group's projects.** See [State at v0](#state-at-v0-2026-11-14) for what it does today and its known limits.
 
 **What it's for (decided 2026-11-13): project memory.** A coordinator has to remember everything a project needs, and
 most of that knowledge left with whoever ran it last. Bayani-1 has one job: **"What else does this project need, and
@@ -62,13 +62,13 @@ Who to ask stays a rule. Figures are never set by the model (BIX rules 21, 23).
 - **The test set is written first and kept apart.** Never trained on; ideally partly written by someone who didn't write the training data, so scores aren't inflated by our own phrasing.
 - **English only (decided 2026-11-11).** Training and test data are in English; coordinators use English. No Filipino or Taglish work for Bayani-1.
 - **Synthetic variants** (more phrasings of the same projects) come from an open model, not a frontier API, so the whole lineage stays open.
-- **Training:** LoRA on a 360M–1B base, answering a single option token so probabilities come from the logits. Trained in the cloud with Unsloth on a free GPU notebook (Kaggle or Google Colab), because the M3 Air has 8 GB (decided 2026-11-11). The Mac prepares the data, runs the evaluation, and runs the exported GGUF model with llama.cpp.
+- **Training:** LoRA on a small open base (360M–1.7B), answering a single option token so probabilities come from the logits. Trained in the cloud with Unsloth on a free GPU notebook (Kaggle or Google Colab), because training needs more memory than a typical laptop has (decided 2026-11-11). The Mac prepares the data, runs the evaluation, and runs the exported GGUF model with llama.cpp.
 - **Later, with consent:** pilot projects and the edit between what Bayani proposed and what a lead confirmed.
 
 ## Model constraints
 
-- The base must be a non-frontier open model. Llama is excluded (Llama 1B/3B are slimmed-down frontier models). Candidates: OLMo, SmolLM. Gemma and Qwen are a grey zone; ask before using.
-- It runs on the device from day one. Jev or a frontier model may be used only as an offline comparison, never in the product.
+- The base must be a non-frontier open model. Llama is excluded (Llama 1B/3B are slimmed-down frontier models). Candidates: OLMo, SmolLM. Gemma and Qwen need their licences checked before use.
+- It runs on the device from day one. A frontier model may be used only as an offline comparison, never in the product.
 - Grammar-constrained output (llama.cpp grammars), checked by Core.
 
 **Native only for v0 (decided 2026-11-11).** Bayani runs in the iOS and Android apps through llama.rn. The PWA works without it, and there is no cloud AI API. A browser engine (llama.cpp in wasm or WebGPU) is a later option, only if coordinators stay on the PWA and want Bayani, and only after a one-day test on a real iPhone with a trained model.
@@ -77,7 +77,7 @@ Who to ask stays a rule. Figures are never set by the model (BIX rules 21, 23).
 
 ## Evaluation
 
-Per question: accuracy, and whether its probabilities match how often it's right. Baselines: off-the-shelf open models with the grammar, and Jev or a frontier model offline. The task eval is the headline.
+Per question: accuracy, and whether its probabilities match how often it's right. Baselines: off-the-shelf open models with the grammar, and a frontier model offline. The task eval is the headline.
 
 ## In this repository
 
@@ -93,7 +93,7 @@ Per question: accuracy, and whether its probabilities match how often it's right
 Setup: clone `bix`, `bayanihan` and `bayani` side by side, run `npm install` in `bayanihan/` and here, then
 `npm run verify`.
 
-**Coming next:** the evaluation harness and baseline results (B21).
+**Coming next:** the evaluation harness and baseline results.
 
 ## State at v0 (2026-11-14)
 
@@ -101,8 +101,12 @@ Setup: clone `bix`, `bayanihan` and `bayani` side by side, run `npm install` in 
   data. Held-out test: 0.96 in training (transformers); 0.90 in llama.cpp; 35/40 in Ollama. Files:
   `huggingface.co/dasig/bayani-1` (`base-q4_k_m.gguf`, `bayani-1-lora.gguf`). Results: `train/results/README.md`.
 - **Run it locally:** `ollama create bayani-1 -f train/Modelfile` (base + ADAPTER), or `python3 train/local_check.py`.
-- **In the Dasig app (v0.16.0):** Settings → Ask Bayani shows facts from `knowledge/` as written, with sources, on every
-  phone and the web. Android and iPhone can download Bayani-1 (llama.rn, offline); project memory then asks it whether
-  a usual step is already in the plan under other words, and drops that suggestion.
+- **In the Dasig app (v0.18.0, 2026-11-15):** all six trained questions are used, built with this package's `buildPack`
+  (option `prefiltered`: records already filtered for the person by their server) and read with `decode`. Same step and
+  "does it belong" filter project memory; "which known step" and "which team" are suggestions on a project or step;
+  "one-off" and "general title" suggest what to keep at close-out. Each suggestion shows its confidence (raw token
+  probabilities over the allowed answers) and is shown at 0.8 or above; accepting records Bayani-1, the question and the
+  confidence in Provenance. Through the app's own code on llama.cpp, the held-out set scores 95% on fixed answers
+  (`dasig-app/app/scripts/bayani-check.ts`). Facts from `knowledge/` stay looked up, never generated.
 - **Known limits:** synthetic, tidy English data from six playbooks; not yet tested on a held-out kind of project, messy
-  wordings or a real group's project (B38). Facts are looked up, never generated.
+  wordings or a real group's project. Facts are looked up, never generated.

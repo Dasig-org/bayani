@@ -19,7 +19,11 @@ export type Question =
   | { kind: "which-team"; step: string }
   | { kind: "general-title"; step: string };
 
-export type PackInput = { records: BixResource[]; viewer: string; now: string; maxTokens?: number };
+/**
+ * `prefiltered`: the records were already filtered for `viewer` by the server that keeps them (an app reading through
+ * its person's own session, BIX rule 26), so they are used as given. Without it, each record is checked here.
+ */
+export type PackInput = { records: BixResource[]; viewer: string; now: string; maxTokens?: number; prefiltered?: boolean };
 
 export type Pack = {
   question: Question["kind"];
@@ -44,6 +48,7 @@ const kindsText = (cs: unknown) => ((cs as { code?: string }[] | undefined) ?? [
 const DAY = 86_400_000;
 
 function visibleOnly(input: PackInput): Map<string, BixResource> {
+  if (input.prefiltered) return new Map(input.records.map((r) => [refOf(r), r]));
   const by = (t: string) => input.records.filter((r) => r.resourceType === t);
   const dir: Directory = { roles: by("Role"), positions: by("Position"), teams: by("Team"), initiatives: by("Initiative"), tasks: by("Task") };
   const out = new Map<string, BixResource>();
