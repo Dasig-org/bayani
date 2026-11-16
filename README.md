@@ -95,6 +95,36 @@ Setup: clone `bix`, `bayanihan` and `bayani` side by side, run `npm install` in 
 
 **Coming next:** the evaluation harness and baseline results.
 
+## Shipping a new model (any base)
+
+The app doesn't name a model. It reads `bayani-manifest.json` next to the model files and offers a newer version as an
+update, so a new base (OLMo-2, a later SmolLM) or a retrained add-on ships without a new app. It writes prompts as chat
+messages and llama.cpp applies the model's own chat format from the GGUF, the same way training does
+(`tokenizer.apply_chat_template` in `train/train.py`).
+
+1. **Train** on Kaggle (GPU): `BAYANI_MODELS=allenai/OLMo-2-0425-1B-Instruct python train/train.py`. It scores the
+   trained model, saves the add-on without merging (B41), converts the base and the add-on to GGUF separately and scores
+   them together in llama.cpp. Keep the run only if llama.cpp's score matches the trained one.
+2. **Check on a Mac** with the app's own code: `llama-server -m base.gguf --lora add-on.gguf -c 2048 --jinja`, then
+   `npx vite-node ../dasig-app/app/scripts/bayani-check.ts` (the six questions, at the app's threshold) and
+   `npx vite-node ../dasig-app/app/scripts/bayani-answer-check.ts` (sorting typed questions).
+3. **Publish** the two `.gguf` files on Hugging Face, then the manifest:
+
+```json
+{ "name": "Bayani-1", "version": "1b-olmo2-q4-lora-2026-11-20", "family": "OLMo-2-1B-Instruct",
+  "files": { "base": { "url": "https://huggingface.co/dasig/bayani-1/resolve/main/olmo2/base-q4_k_m.gguf", "file": "olmo2-base-q4_k_m.gguf", "mb": 0 },
+             "lora": { "url": "https://huggingface.co/dasig/bayani-1/resolve/main/olmo2/bayani-1-lora.gguf", "file": "olmo2-bayani-1-lora.gguf", "mb": 0 } } }
+```
+
+`mb` is each file's size in megabytes (shown before downloading; the app checks the exact size the server sends).
+`version` is what suggestions record as the model in BIX Provenance, so never reuse one. Without a manifest the app uses
+the model it was released with (SmolLM2-1.7B, `1.7B-q4-lora-2026-11-14`).
+
+**Why OLMo-2-1B next** (train/results/README.md): trained, it scored 0.96 on the fixed-answer questions, the same as
+SmolLM2-1.7B, with better calibration (0.05), at 1B parameters instead of 1.7B, so it suits 4 GB phones (D25). It is
+fully open, data included. Its GGUF was never published because the add-on export bug (B41) was fixed on the SmolLM2
+run; the training script now does the fixed export for any base.
+
 ## State at v0 (2026-11-14)
 
 - **Model:** Bayani-1 = SmolLM2-1.7B-Instruct (Q4_K_M GGUF) plus the Bayani LoRA add-on (36 MB), trained on the v0
