@@ -2,6 +2,7 @@
   "name": "@bayanihan/bayani",
   "version": "0.1.0",
   "description": "Bayani: the small language model of Bayanihan Intelligence. This package builds what Bayani reads (the context pack) from BIX records and maps its answers back. The model itself is in development.",
+  "license": "Apache-2.0",
   "type": "module",
   "main": "src/index.ts",
   "types": "src/index.ts",

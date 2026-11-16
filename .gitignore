@@ -25,3 +25,4 @@ GEMINI.md
 .mcp.json
 .vscode/
 .idea/
+__pycache__/
