@@ -1,33 +1,53 @@
 {
- "projects": 264,
- "groups": 66,
- "train": 2425,
- "test": 254,
- "shortlistRecall": 0.99,
+ "projects": 588,
+ "groups": 147,
+ "train": 5495,
+ "test": 1202,
+ "shortlistRecall": 0.983,
+ "heldOut": "medical-mission",
+ "bySet": {
+  "tidy": 526,
+  "messy": 526,
+  "held-out-kind": 106,
+  "intent": 37,
+  "self": 7
+ },
  "byQuestion": {
   "same-practice": [
-   760,
-   82
+   1586,
+   372
   ],
   "which-practice": [
-   385,
-   41
+   813,
+   184
   ],
   "applies": [
-   418,
-   40
+   855,
+   182
   ],
   "one-off": [
-   93,
-   9
+   197,
+   44
   ],
   "which-team": [
-   389,
-   41
+   824,
+   190
   ],
   "general-title": [
-   380,
-   41
+   793,
+   186
+  ],
+  "intent": [
+   375,
+   37
+  ],
+  "about-me": [
+   16,
+   3
+  ],
+  "decline": [
+   36,
+   4
   ]
  }
 }

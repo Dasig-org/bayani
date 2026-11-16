@@ -5,6 +5,10 @@ score on the same held-out test.jsonl as the baseline, the same way (the allowed
 probability). Saves each LoRA adapter and results to /kaggle/working.
 
 Plain transformers + peft rather than Unsloth, so OLMo-2 works without depending on Unsloth's model list.
+
+v1 data (2026-11-16): an example may carry its own system prompt (the 7th question, sorting a typed question, uses
+the app's); scores are given per test set (tidy, messy, held-out-kind, intent, self) and on the v0 test set
+(test-v0.jsonl) for comparison; each model's files go to its own folder, so several bases can run in one session.
 """
 import json, math, os, re, glob, time, random, socket, subprocess, sys
 
@@ -33,15 +37,16 @@ device = "cuda"
 find = lambda n: (glob.glob(f"/kaggle/input/**/{n}", recursive=True) or [f"data/out/{n}"])[0]
 train = [json.loads(l) for l in open(find("train.jsonl"))]
 test = [json.loads(l) for l in open(find("test.jsonl"))]
-print(f"{len(train)} train, {len(test)} test", flush=True)
+test_v0 = [json.loads(l) for l in open(find("test-v0.jsonl"))] if glob.glob("/kaggle/input/**/test-v0.jsonl", recursive=True) or os.path.exists("data/out/test-v0.jsonl") else []
+print(f"{len(train)} train, {len(test)} test, {len(test_v0)} v0 test", flush=True)
 
 
-def prompt(tok, text):
-    return tok.apply_chat_template([{"role": "system", "content": SYSTEM}, {"role": "user", "content": text}], tokenize=False, add_generation_prompt=True)
+def prompt(tok, text, system=None):
+    return tok.apply_chat_template([{"role": "system", "content": system or SYSTEM}, {"role": "user", "content": text}], tokenize=False, add_generation_prompt=True)
 
 
 def encode(tok, e):
-    p = tok(prompt(tok, e["text"]), add_special_tokens=False).input_ids
+    p = tok(prompt(tok, e["text"], e.get("system")), add_special_tokens=False).input_ids
     a = tok(e["answer"] + (tok.eos_token or ""), add_special_tokens=False).input_ids
     ids = (p + a)[-MAXLEN:]
     labels = ([-100] * len(p) + a)[-MAXLEN:]
@@ -78,8 +83,8 @@ def fit(model, tok):
 
 
 @torch.no_grad()
-def choose(model, tok, text, answers):
-    p_ids = tok(prompt(tok, text), add_special_tokens=False).input_ids
+def choose(model, tok, text, answers, system=None):
+    p_ids = tok(prompt(tok, text, system), add_special_tokens=False).input_ids
     scores = []
     for a in answers:
         a_ids = tok(a, add_special_tokens=False).input_ids
@@ -93,10 +98,10 @@ def choose(model, tok, text, answers):
 
 
 @torch.no_grad()
-def generate(model, tok, text):
-    ids = tok(prompt(tok, text), return_tensors="pt", add_special_tokens=False).input_ids.to(device)
+def generate(model, tok, text, system=None, max_new=24):
+    ids = tok(prompt(tok, text, system), return_tensors="pt", add_special_tokens=False).input_ids.to(device)
     with torch.autocast("cuda", dtype=torch.float16):
-        out = model.generate(ids, max_new_tokens=24, do_sample=False, pad_token_id=tok.eos_token_id)
+        out = model.generate(ids, max_new_tokens=max_new, do_sample=False, pad_token_id=tok.eos_token_id)
     return tok.decode(out[0, ids.shape[1]:], skip_special_tokens=True).strip().split("\n")[0].strip().strip('"')
 
 
@@ -111,15 +116,15 @@ def word_f1(a, b):
     return 2 * p * r / (p + r)
 
 
-def evaluate(model, tok):
+def evaluate(model, tok, rows_in):
     rows = []
-    for e in test:
+    for e in rows_in:
         if isinstance(e["answers"], list):
-            ps = choose(model, tok, e["text"], e["answers"]); i = max(range(len(ps)), key=lambda k: ps[k])
-            rows.append({"q": e["question"], "ok": e["answers"][i] == e["answer"], "conf": ps[i]})
+            ps = choose(model, tok, e["text"], e["answers"], e.get("system")); i = max(range(len(ps)), key=lambda k: ps[k])
+            rows.append({"q": e["question"], "set": e.get("set", "v0"), "ok": e["answers"][i] == e["answer"], "conf": ps[i]})
         else:
-            got = generate(model, tok, e["text"])
-            rows.append({"q": e["question"], "ok": norm(got) == norm(e["answer"]), "f1": word_f1(got, e["answer"]), "conf": None, "got": got, "want": e["answer"]})
+            got = generate(model, tok, e["text"], e.get("system"), 24 if e["question"] == "general-title" else 64)
+            rows.append({"q": e["question"], "set": e.get("set", "v0"), "ok": norm(got) == norm(e["answer"]), "f1": word_f1(got, e["answer"]), "conf": None, "got": got, "want": e["answer"]})
     by = {}
     for r in rows: by.setdefault(r["q"], []).append(r)
     per = {q: {"n": len(v), "accuracy": round(sum(x["ok"] for x in v) / len(v), 3), **({"wordF1": round(sum(x["f1"] for x in v) / len(v), 3)} if v[0]["conf"] is None else {})} for q, v in sorted(by.items())}
@@ -127,8 +132,12 @@ def evaluate(model, tok):
     bins = [[] for _ in range(10)]
     for r in fixed: bins[min(int(r["conf"] * 10), 9)].append(r)
     ece = sum(len(b) / len(fixed) * abs(sum(x["ok"] for x in b) / len(b) - sum(x["conf"] for x in b) / len(b)) for b in bins if b)
-    samples = [{"got": r["got"], "want": r["want"]} for r in rows if r["conf"] is None][:8]
-    return {"perQuestion": per, "fixedAnswerAccuracy": round(sum(r["ok"] for r in fixed) / len(fixed), 3), "calibrationError": round(ece, 3), "titleSamples": samples}
+    samples = [{"got": r["got"], "want": r["want"]} for r in rows if r["conf"] is None][:8] + [{"got": r["got"], "want": r["want"]} for r in rows if r["q"] in ("about-me", "decline")]
+    sets = {}
+    for r in rows: sets.setdefault(r["set"], []).append(r)
+    per_set = {k: {"n": len(v), "fixed": round(sum(x["ok"] for x in v if x["conf"] is not None) / max(1, sum(x["conf"] is not None for x in v)), 3),
+                   "byQuestion": {q: round(sum(x["ok"] for x in v if x["q"] == q) / sum(x["q"] == q for x in v), 3) for q in sorted({x["q"] for x in v})}} for k, v in sorted(sets.items())}
+    return {"perQuestion": per, "perSet": per_set, "fixedAnswerAccuracy": round(sum(r["ok"] for r in fixed) / len(fixed), 3), "calibrationError": round(ece, 3), "titleSamples": samples}
 
 
 def evaluate_subset(model, tok, n):
@@ -139,13 +148,14 @@ def evaluate_subset(model, tok, n):
     return round(ok / len(xs), 3)
 
 
-def export(model, tok, name):
+def export(model, tok, name, out):
     """No merge (B41): save the trained add-on (LoRA) directly, prove it isn't empty, convert the base model and the
     add-on to GGUF separately, and score them together in llama.cpp (base + --lora), as Ollama's ADAPTER would."""
     import urllib.request
     from huggingface_hub import snapshot_download
     from safetensors.torch import save_file
-    ad = f"{OUT}/bayani-lora"; os.makedirs(ad, exist_ok=True)
+    os.makedirs(out, exist_ok=True)
+    ad = f"{out}/bayani-lora"; os.makedirs(ad, exist_ok=True)
     sd = {k.replace(".default", ""): v.detach().half().contiguous().cpu() for k, v in model.state_dict().items() if "lora_" in k}
     nz = max((v.abs().max().item() for k, v in sd.items() if "lora_B" in k), default=0)
     print("lora tensors:", len(sd), "max |lora_B|:", nz, flush=True)
@@ -157,31 +167,36 @@ def export(model, tok, name):
     print("adapter MB:", os.path.getsize(f"{ad}/adapter_model.safetensors") // 1_000_000, flush=True)
     base = snapshot_download(name)
     run = lambda *a: subprocess.run(list(a), check=True)
-    run("git", "clone", "-q", "--depth", "1", "https://github.com/ggml-org/llama.cpp", "/tmp/llama.cpp")
-    run(sys.executable, "-m", "pip", "install", "-q", "/tmp/llama.cpp/gguf-py", "sentencepiece", "protobuf")
+    if not os.path.isdir("/tmp/llama.cpp"):
+        run("git", "clone", "-q", "--depth", "1", "https://github.com/ggml-org/llama.cpp", "/tmp/llama.cpp")
+        run(sys.executable, "-m", "pip", "install", "-q", "/tmp/llama.cpp/gguf-py", "sentencepiece", "protobuf")
+        run("cmake", "-S", "/tmp/llama.cpp", "-B", "/tmp/llama.cpp/build", "-DGGML_NATIVE=OFF", "-DLLAMA_CURL=OFF", "-DCMAKE_BUILD_TYPE=Release")
+        run("cmake", "--build", "/tmp/llama.cpp/build", "--target", "llama-quantize", "llama-server", "-j", str(os.cpu_count() or 2))
     run(sys.executable, "/tmp/llama.cpp/convert_hf_to_gguf.py", base, "--outfile", "/tmp/base-f16.gguf", "--outtype", "f16")
-    run(sys.executable, "/tmp/llama.cpp/convert_lora_to_gguf.py", ad, "--base", base, "--outfile", f"{OUT}/bayani-1-lora.gguf", "--outtype", "f16")
-    run("cmake", "-S", "/tmp/llama.cpp", "-B", "/tmp/llama.cpp/build", "-DGGML_NATIVE=OFF", "-DLLAMA_CURL=OFF", "-DCMAKE_BUILD_TYPE=Release")
-    run("cmake", "--build", "/tmp/llama.cpp/build", "--target", "llama-quantize", "llama-server", "-j", str(os.cpu_count() or 2))
+    run(sys.executable, "/tmp/llama.cpp/convert_lora_to_gguf.py", ad, "--base", base, "--outfile", f"{out}/bayani-1-lora.gguf", "--outtype", "f16")
     binary = lambda n: glob.glob(f"/tmp/llama.cpp/build/**/{n}", recursive=True)[0]
-    run(binary("llama-quantize"), "/tmp/base-f16.gguf", f"{OUT}/base-q4_k_m.gguf", "Q4_K_M")
-    for f in ("base-q4_k_m.gguf", "bayani-1-lora.gguf"): print(f, os.path.getsize(f"{OUT}/{f}") // 1_000_000, "MB", flush=True)
-    for label, extra in (("base only", []), ("base + Bayani add-on", ["--lora", f"{OUT}/bayani-1-lora.gguf"])):
-        srv = subprocess.Popen([binary("llama-server"), "-m", f"{OUT}/base-q4_k_m.gguf", *extra, "--port", "8099", "-c", "2048"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    run(binary("llama-quantize"), "/tmp/base-f16.gguf", f"{out}/base-q4_k_m.gguf", "Q4_K_M")
+    os.remove("/tmp/base-f16.gguf")
+    for f in ("base-q4_k_m.gguf", "bayani-1-lora.gguf"): print(f, os.path.getsize(f"{out}/{f}") // 1_000_000, "MB", flush=True)
+    # 120 fixed-answer questions spread over every test set, so llama.cpp is checked on messy, held-out and typed ones too.
+    fixed = [e for e in test if isinstance(e["answers"], list)]
+    xs = fixed[::max(1, len(fixed) // 120)][:120]
+    for label, extra in (("base only", []), ("base + Bayani add-on", ["--lora", f"{out}/bayani-1-lora.gguf"])):
+        srv = subprocess.Popen([binary("llama-server"), "-m", f"{out}/base-q4_k_m.gguf", *extra, "--port", "8099", "-c", "2048"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         try:
             for _ in range(240):
                 try: urllib.request.urlopen("http://127.0.0.1:8099/health", timeout=1); break
                 except Exception: time.sleep(0.5)
-            xs = [e for e in test if isinstance(e["answers"], list)][:60]; ok = 0
+            ok = 0
             for e in xs:
-                body = {"prompt": tok(prompt(tok, e["text"]), add_special_tokens=False).input_ids, "temperature": 0, "n_predict": 8,
+                body = {"prompt": tok(prompt(tok, e["text"], e.get("system")), add_special_tokens=False).input_ids, "temperature": 0, "n_predict": 8,
                         "grammar": "root ::= " + " | ".join(json.dumps(a) for a in e["answers"])}
                 r = json.load(urllib.request.urlopen(urllib.request.Request("http://127.0.0.1:8099/completion", json.dumps(body).encode(), {"Content-Type": "application/json"})))
                 ok += r["content"].strip() == e["answer"]
-            results["models"][name][f"llamaCpp60 {label}"] = round(ok / len(xs), 3)
-            print(f"llama.cpp, {label}, 60 questions:", round(ok / len(xs), 3), flush=True)
+            results["models"][name][f"llamaCpp{len(xs)} {label}"] = round(ok / len(xs), 3)
+            print(f"llama.cpp, {label}, {len(xs)} questions:", round(ok / len(xs), 3), flush=True)
         finally:
-            srv.terminate()
+            srv.terminate(); srv.wait()
     json.dump(results, open(f"{OUT}/trained.json", "w"), indent=1)
 
 
@@ -198,9 +213,11 @@ for name in MODELS:
             if p.requires_grad: p.data = p.data.float()
         print(f"training {name}", flush=True)
         fit(model, tok)
-        res = evaluate(model, tok)
-        results["models"][name] = {**res, "seconds": round(time.time() - t0)}
-        export(model, tok, name)
+        res = evaluate(model, tok, test)
+        results["models"][name] = {**res, **({"v0": evaluate(model, tok, test_v0)} if test_v0 else {}), "seconds": round(time.time() - t0)}
+        print(json.dumps({name: {k: results["models"][name][k] for k in ("fixedAnswerAccuracy", "calibrationError", "perSet")}}, indent=1), flush=True)
+        json.dump(results, open(f"{OUT}/trained.json", "w"), indent=1)
+        export(model, tok, name, f"{OUT}/{name.split('/')[-1]}")
         del model; torch.cuda.empty_cache()
     except Exception as ex:
         results["models"][name] = {"error": repr(ex)[:400]}

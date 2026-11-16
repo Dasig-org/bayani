@@ -1,0 +1,492 @@
+{
+ "train": 5495,
+ "test": 1202,
+ "epochs": 2,
+ "lr": 0.0002,
+ "models": {
+  "allenai/OLMo-2-0425-1B-Instruct": {
+   "perQuestion": {
+    "about-me": {
+     "n": 3,
+     "accuracy": 1.0,
+     "wordF1": 1.0
+    },
+    "applies": {
+     "n": 182,
+     "accuracy": 1.0
+    },
+    "decline": {
+     "n": 4,
+     "accuracy": 1.0,
+     "wordF1": 1.0
+    },
+    "general-title": {
+     "n": 186,
+     "accuracy": 0.36,
+     "wordF1": 0.604
+    },
+    "intent": {
+     "n": 37,
+     "accuracy": 0.838
+    },
+    "one-off": {
+     "n": 44,
+     "accuracy": 1.0
+    },
+    "same-practice": {
+     "n": 372,
+     "accuracy": 0.938
+    },
+    "which-practice": {
+     "n": 184,
+     "accuracy": 0.902
+    },
+    "which-team": {
+     "n": 190,
+     "accuracy": 0.811
+    }
+   },
+   "perSet": {
+    "held-out-kind": {
+     "n": 106,
+     "fixed": 0.8,
+     "byQuestion": {
+      "applies": 1.0,
+      "general-title": 0.0,
+      "one-off": 1.0,
+      "same-practice": 0.781,
+      "which-practice": 0.75,
+      "which-team": 0.562
+     }
+    },
+    "intent": {
+     "n": 37,
+     "fixed": 0.838,
+     "byQuestion": {
+      "intent": 0.838
+     }
+    },
+    "messy": {
+     "n": 526,
+     "fixed": 0.916,
+     "byQuestion": {
+      "applies": 1.0,
+      "general-title": 0.376,
+      "one-off": 1.0,
+      "same-practice": 0.935,
+      "which-practice": 0.893,
+      "which-team": 0.805
+     }
+    },
+    "self": {
+     "n": 7,
+     "fixed": 0.0,
+     "byQuestion": {
+      "about-me": 1.0,
+      "decline": 1.0
+     }
+    },
+    "tidy": {
+     "n": 526,
+     "fixed": 0.95,
+     "byQuestion": {
+      "applies": 1.0,
+      "general-title": 0.412,
+      "one-off": 1.0,
+      "same-practice": 0.971,
+      "which-practice": 0.94,
+      "which-team": 0.862
+     }
+    }
+   },
+   "fixedAnswerAccuracy": 0.918,
+   "calibrationError": 0.056,
+   "titleSamples": [
+    {
+     "got": "Get the barangay permit",
+     "want": "Get the barangay permit"
+    },
+    {
+     "got": "Arrange first aid",
+     "want": "Get the LGU traffic clearance"
+    },
+    {
+     "got": "Map the course",
+     "want": "Map the route"
+    },
+    {
+     "got": "Call for sponsors",
+     "want": "Call for sponsors"
+    },
+    {
+     "got": "Collect sponsor logos",
+     "want": "Collect sponsor logos"
+    },
+    {
+     "got": "Finalize the race bibs",
+     "want": "Design the race shirt"
+    },
+    {
+     "got": "Get race numbers",
+     "want": "Print race bibs"
+    },
+    {
+     "got": "Recruit route marshals",
+     "want": "Recruit route marshals"
+    },
+    {
+     "got": "I'm Bayani-1, the small model in the Dasig app. I answer a few fixed questions about a group's projects from its own records.",
+     "want": "I'm Bayani-1, the small model in the Dasig app. I answer a few fixed questions about a group's projects from its own records."
+    },
+    {
+     "got": "I'm Bayani-1, the small model in the Dasig app. I answer a few fixed questions about a group's projects from its own records.",
+     "want": "I'm Bayani-1, the small model in the Dasig app. I answer a few fixed questions about a group's projects from its own records."
+    },
+    {
+     "got": "I'm Bayani-1, the small model in the Dasig app. I answer a few fixed questions about a group's projects from its own records.",
+     "want": "I'm Bayani-1, the small model in the Dasig app. I answer a few fixed questions about a group's projects from its own records."
+    },
+    {
+     "got": "I can't answer that. I only answer a few fixed questions about a group's projects from its own records.",
+     "want": "I can't answer that. I only answer a few fixed questions about a group's projects from its own records."
+    },
+    {
+     "got": "I can't answer that. I only answer a few fixed questions about a group's projects from its own records.",
+     "want": "I can't answer that. I only answer a few fixed questions about a group's projects from its own records."
+    },
+    {
+     "got": "I can't answer that. I only answer a few fixed questions about a group's projects from its own records.",
+     "want": "I can't answer that. I only answer a few fixed questions about a group's projects from its own records."
+    },
+    {
+     "got": "I can't answer that. I only answer a few fixed questions about a group's projects from its own records.",
+     "want": "I can't answer that. I only answer a few fixed questions about a group's projects from its own records."
+    }
+   ],
+   "v0": {
+    "perQuestion": {
+     "applies": {
+      "n": 40,
+      "accuracy": 1.0
+     },
+     "general-title": {
+      "n": 41,
+      "accuracy": 0.341,
+      "wordF1": 0.58
+     },
+     "one-off": {
+      "n": 9,
+      "accuracy": 1.0
+     },
+     "same-practice": {
+      "n": 82,
+      "accuracy": 0.939
+     },
+     "which-practice": {
+      "n": 41,
+      "accuracy": 0.927
+     },
+     "which-team": {
+      "n": 41,
+      "accuracy": 0.854
+     }
+    },
+    "perSet": {
+     "v0": {
+      "n": 254,
+      "fixed": 0.934,
+      "byQuestion": {
+       "applies": 1.0,
+       "general-title": 0.341,
+       "one-off": 1.0,
+       "same-practice": 0.939,
+       "which-practice": 0.927,
+       "which-team": 0.854
+      }
+     }
+    },
+    "fixedAnswerAccuracy": 0.934,
+    "calibrationError": 0.056,
+    "titleSamples": [
+     {
+      "got": "Get the barangay permit",
+      "want": "Get the barangay permit"
+     },
+     {
+      "got": "Arrange first aid",
+      "want": "Get the LGU traffic clearance"
+     },
+     {
+      "got": "Map the course",
+      "want": "Map the route"
+     },
+     {
+      "got": "Call for sponsors",
+      "want": "Call for sponsors"
+     },
+     {
+      "got": "Collect sponsor logos",
+      "want": "Collect sponsor logos"
+     },
+     {
+      "got": "Finalize the race bibs",
+      "want": "Design the race shirt"
+     },
+     {
+      "got": "Get race numbers",
+      "want": "Print race bibs"
+     },
+     {
+      "got": "Recruit route marshals",
+      "want": "Recruit route marshals"
+     }
+    ]
+   },
+   "seconds": 1923,
+   "llamaCpp120 base only": 0.333,
+   "llamaCpp120 base + Bayani add-on": 0.933
+  },
+  "HuggingFaceTB/SmolLM2-1.7B-Instruct": {
+   "perQuestion": {
+    "about-me": {
+     "n": 3,
+     "accuracy": 1.0,
+     "wordF1": 1.0
+    },
+    "applies": {
+     "n": 182,
+     "accuracy": 1.0
+    },
+    "decline": {
+     "n": 4,
+     "accuracy": 1.0,
+     "wordF1": 1.0
+    },
+    "general-title": {
+     "n": 186,
+     "accuracy": 0.425,
+     "wordF1": 0.652
+    },
+    "intent": {
+     "n": 37,
+     "accuracy": 0.865
+    },
+    "one-off": {
+     "n": 44,
+     "accuracy": 1.0
+    },
+    "same-practice": {
+     "n": 372,
+     "accuracy": 0.927
+    },
+    "which-practice": {
+     "n": 184,
+     "accuracy": 0.929
+    },
+    "which-team": {
+     "n": 190,
+     "accuracy": 0.821
+    }
+   },
+   "perSet": {
+    "held-out-kind": {
+     "n": 106,
+     "fixed": 0.911,
+     "byQuestion": {
+      "applies": 1.0,
+      "general-title": 0.062,
+      "one-off": 1.0,
+      "same-practice": 0.906,
+      "which-practice": 0.875,
+      "which-team": 0.812
+     }
+    },
+    "intent": {
+     "n": 37,
+     "fixed": 0.865,
+     "byQuestion": {
+      "intent": 0.865
+     }
+    },
+    "messy": {
+     "n": 526,
+     "fixed": 0.905,
+     "byQuestion": {
+      "applies": 1.0,
+      "general-title": 0.447,
+      "one-off": 1.0,
+      "same-practice": 0.9,
+      "which-practice": 0.905,
+      "which-team": 0.805
+     }
+    },
+    "self": {
+     "n": 7,
+     "fixed": 0.0,
+     "byQuestion": {
+      "about-me": 1.0,
+      "decline": 1.0
+     }
+    },
+    "tidy": {
+     "n": 526,
+     "fixed": 0.946,
+     "byQuestion": {
+      "applies": 1.0,
+      "general-title": 0.471,
+      "one-off": 1.0,
+      "same-practice": 0.959,
+      "which-practice": 0.964,
+      "which-team": 0.839
+     }
+    }
+   },
+   "fixedAnswerAccuracy": 0.922,
+   "calibrationError": 0.052,
+   "titleSamples": [
+    {
+     "got": "Get the LGU's barangay permit",
+     "want": "Get the barangay permit"
+    },
+    {
+     "got": "Arrange traffic marshals",
+     "want": "Get the LGU traffic clearance"
+    },
+    {
+     "got": "Map the route",
+     "want": "Map the route"
+    },
+    {
+     "got": "Send solicitation letters",
+     "want": "Call for sponsors"
+    },
+    {
+     "got": "Collect sponsor logos",
+     "want": "Collect sponsor logos"
+    },
+    {
+     "got": "Design the race shirt",
+     "want": "Design the race shirt"
+    },
+    {
+     "got": "Print race bibs",
+     "want": "Print race bibs"
+    },
+    {
+     "got": "Recruit route marshals",
+     "want": "Recruit route marshals"
+    },
+    {
+     "got": "I'm Bayani-1, the small model in the Dasig app. I answer a few fixed questions about a group's projects from its own records.",
+     "want": "I'm Bayani-1, the small model in the Dasig app. I answer a few fixed questions about a group's projects from its own records."
+    },
+    {
+     "got": "I'm Bayani-1, the small model in the Dasig app. I answer a few fixed questions about a group's projects from its own records.",
+     "want": "I'm Bayani-1, the small model in the Dasig app. I answer a few fixed questions about a group's projects from its own records."
+    },
+    {
+     "got": "I'm Bayani-1, the small model in the Dasig app. I answer a few fixed questions about a group's projects from its own records.",
+     "want": "I'm Bayani-1, the small model in the Dasig app. I answer a few fixed questions about a group's projects from its own records."
+    },
+    {
+     "got": "I can't answer that. I only answer a few fixed questions about a group's projects from its own records.",
+     "want": "I can't answer that. I only answer a few fixed questions about a group's projects from its own records."
+    },
+    {
+     "got": "I can't answer that. I only answer a few fixed questions about a group's projects from its own records.",
+     "want": "I can't answer that. I only answer a few fixed questions about a group's projects from its own records."
+    },
+    {
+     "got": "I can't answer that. I only answer a few fixed questions about a group's projects from its own records.",
+     "want": "I can't answer that. I only answer a few fixed questions about a group's projects from its own records."
+    },
+    {
+     "got": "I can't answer that. I only answer a few fixed questions about a group's projects from its own records.",
+     "want": "I can't answer that. I only answer a few fixed questions about a group's projects from its own records."
+    }
+   ],
+   "v0": {
+    "perQuestion": {
+     "applies": {
+      "n": 40,
+      "accuracy": 1.0
+     },
+     "general-title": {
+      "n": 41,
+      "accuracy": 0.439,
+      "wordF1": 0.622
+     },
+     "one-off": {
+      "n": 9,
+      "accuracy": 1.0
+     },
+     "same-practice": {
+      "n": 82,
+      "accuracy": 0.951
+     },
+     "which-practice": {
+      "n": 41,
+      "accuracy": 0.927
+     },
+     "which-team": {
+      "n": 41,
+      "accuracy": 0.878
+     }
+    },
+    "perSet": {
+     "v0": {
+      "n": 254,
+      "fixed": 0.944,
+      "byQuestion": {
+       "applies": 1.0,
+       "general-title": 0.439,
+       "one-off": 1.0,
+       "same-practice": 0.951,
+       "which-practice": 0.927,
+       "which-team": 0.878
+      }
+     }
+    },
+    "fixedAnswerAccuracy": 0.944,
+    "calibrationError": 0.055,
+    "titleSamples": [
+     {
+      "got": "Get the LGU's barangay permit",
+      "want": "Get the barangay permit"
+     },
+     {
+      "got": "Arrange traffic marshals",
+      "want": "Get the LGU traffic clearance"
+     },
+     {
+      "got": "Map the route",
+      "want": "Map the route"
+     },
+     {
+      "got": "Send solicitation letters",
+      "want": "Call for sponsors"
+     },
+     {
+      "got": "Collect sponsor logos",
+      "want": "Collect sponsor logos"
+     },
+     {
+      "got": "Design the race shirt",
+      "want": "Design the race shirt"
+     },
+     {
+      "got": "Print race bibs",
+      "want": "Print race bibs"
+     },
+     {
+      "got": "Recruit route marshals",
+      "want": "Recruit route marshals"
+     }
+    ]
+   },
+   "seconds": 2556,
+   "llamaCpp120 base only": 0.117,
+   "llamaCpp120 base + Bayani add-on": 0.925
+  }
+ }
+}

@@ -5,8 +5,14 @@ by code from playbooks. No real group or person. Decided 2026-11-11 (seeded by u
 
 **How it's made** (`data/generate.ts`, run with `npm run data`):
 
-1. **Playbooks** (`data/playbooks.ts`): six kinds of project volunteer groups in the Philippines run (fun run,
-   feeding program, tutoring program, coastal cleanup, community conference, medical mission). Each has its teams,
+1. **Playbooks** (`data/playbooks.ts`): thirteen kinds of project volunteer groups in the Philippines run. v0's six
+   (fun run, feeding program, tutoring program, coastal cleanup, community conference, medical mission), and seven
+   added on 2026-11-16 from how groups describe their own projects in public posts and guides (Rotary and Rotaract
+   clubs, JCI chapters, Red Cross Youth councils, disaster-relief volunteer networks, parish and campus groups, DepEd's
+   Brigada Eskwela and DENR planting guidance): relief operation, bloodletting drive, school supplies drive, mangrove
+   planting, Christmas gift-giving, livelihood training, fundraising event. They use the words officers use (MOA,
+   ocular, solicitation letters, masterlist, claim stubs, turnover, liquidation, accomplishment report); groups,
+   people and places are invented and no named group's material is copied. Each has its teams,
    its usual steps (the team that owns each, the day it's usually done, how often groups include it, how often it's
    forgotten until the last week, what comes before it), a few one-off steps, and several ways people word each step.
 2. **Groups and years**: three invented groups per kind each run it three years and are planning a fourth, as BIX
@@ -21,6 +27,21 @@ by code from playbooks. No real group or person. Decided 2026-11-11 (seeded by u
 
 **Kept apart.** The test set uses different groups, different random seeds, and wordings that never appear in
 training (checked by a test). Never train on `test.jsonl`.
+
+**Harder checks (v1, B38, B39).** Each test row has a `set`:
+
+- `tidy`: the test groups, wordings as written (as in v0).
+- `messy`: the same projects again, every wording made messy the way people type in a hurry (lower case, dropped
+  words, short forms like "brgy" and "w/", a typo, "asap", "pls"). Comparing it with `tidy` shows what messiness costs.
+  Training also sees messy variants of its own wordings.
+- `held-out-kind`: medical mission is left out of training entirely (`HELD_OUT` in `data/generate.ts`); all its groups
+  are tested.
+- `intent`: the 7th question, sorting a typed question into the Dasig app's kinds (`late`, `team`, `not-recorded`,
+  ...), with the app's exact prompt (`data/asking.ts`; a test checks it against the app's `bayaniAnswer.ts`).
+- `self`: who Bayani is, in one stable sentence, and one sentence for declining anything outside its questions, so it
+  never invents facts (B39).
+
+The v0 test set is kept unchanged as `test-v0.jsonl`, so new models can be compared with v0's scores.
 
 **Files** (`data/out/`, regenerated deterministically): `train.jsonl`, `test.jsonl` (one example per line:
 `question`, `text`, `answers`, `answer`), `starter-practices.json` (the playbooks' usual steps as Dasig's starter

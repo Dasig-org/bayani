@@ -1,6 +1,7 @@
 import { computeObserved, type BixResource } from "@bayanihan/core";
 import { buildPack, type Question } from "../src/index.js";
 import { PLAYBOOKS, type Playbook } from "./playbooks.js";
+import { intentExamples, selfExamples, type AskExample } from "./asking.js";
 
 /**
  * Bayani-1 v0 data (B20): invented groups run each kind of project for three years and are planning a fourth.
@@ -8,6 +9,11 @@ import { PLAYBOOKS, type Playbook } from "./playbooks.js";
  * calculates the Practices' figures exactly as the app will; the context pack turns each question into text.
  *
  * The test set is kept apart: different groups, different seeds, and wordings that never appear in training.
+ *
+ * v1 data (B38, B39, 2026-11-16): one kind of project (HELD_OUT) is left out of training entirely and tested on; the
+ * test groups are asked again with their wordings made messy (same projects, so the two scores compare); training
+ * sees messy variants of its own wordings; and two more parts come from data/asking.ts: sorting a typed question into
+ * the app's kinds (the 7th question) and who Bayani is / declining. The v0 test set is kept as data/out/test-v0.jsonl.
  */
 
 export const NOW = "2027-02-04T20:00:00+08:00";
@@ -39,15 +45,45 @@ function rng(seed: string) {
   return { next, pick: <T>(xs: T[]) => xs[Math.floor(next() * xs.length)]!, chance: (p: number) => next() < p };
 }
 
-export type Example = { id: string; split: "train" | "test"; group: string; projectKind: string; question: Question["kind"]; text: string; answers: string[] | { text: { maxLength: number } }; answer: string };
+/** Left out of training entirely: every group of this kind is in the test set, as "held-out-kind". */
+export const HELD_OUT = "medical-mission";
+
+/**
+ * A wording made messy the way people type in a hurry: lower case, dropped words, short forms, a typo, extra marks.
+ * Deterministic for a seed. Real titles are messier still; this is a first step past v0's tidy English.
+ */
+const SHORT: [RegExp, string][] = [[/\bbarangay\b/gi, "brgy"], [/\band\b/gi, "&"], [/\bwith\b/gi, "w/"], [/\bplease\b/gi, "pls"], [/\bvolunteers\b/gi, "vols"],
+  [/\bmeeting\b/gi, "mtg"], [/\byou\b/gi, "u"], [/\bnumber\b/gi, "no."], [/\bcoordinate\b/gi, "coord"], [/\bregistration\b/gi, "reg"], [/\binformation\b/gi, "info"]];
+export function messy(w: string, seed: string): string {
+  const r = rng(`messy:${seed}`);
+  let x = w;
+  if (r.chance(0.6)) x = x.toLowerCase();
+  if (r.chance(0.5)) x = x.replace(/\b(the|a|an) /gi, "");
+  for (const [re, to] of SHORT) if (r.chance(0.7)) x = x.replace(re, to);
+  if (r.chance(0.5)) {
+    const words = x.split(" "), i = words.findIndex((v, k) => k >= Math.floor(r.next() * words.length) && v.length > 4);
+    if (i >= 0) { const v = words[i]!, j = 1 + Math.floor(r.next() * (v.length - 3)); words[i] = r.chance(0.5) ? v.slice(0, j) + v[j + 1] + v[j] + v.slice(j + 2) : v.slice(0, j) + v.slice(j + 1); }
+    x = words.join(" ");
+  }
+  if (r.chance(0.35)) x = r.pick(["todo: ", "- ", "follow up ", "pls ", "re: "]) + x;
+  if (r.chance(0.4)) x = x.replace(/[.?!]$/, "") + r.pick(["!!", " asap", " - urgent", " (pending)", " ??", " tbd", "..", " pls"]);
+  return x.replace(/\s+/g, " ").trim() || w;
+}
+
+export type Example = { id: string; split: "train" | "test"; set?: string; system?: string; group: string; projectKind: string; question: Question["kind"]; text: string; answers: string[] | { text: { maxLength: number } }; answer: string };
 export type GroupData = { records: BixResource[]; examples: Example[]; shortlistMisses: number; shortlistTries: number; projects: number };
 
-export function buildGroup(pb: Playbook, groupName: string, split: "train" | "test"): GroupData {
+export type BuildOptions = { set?: string; messy?: boolean; wordings?: "train" | "test" };
+export function buildGroup(pb: Playbook, groupName: string, split: "train" | "test", opts: BuildOptions = {}): GroupData {
   const r = rng(`${split}:${pb.kind}:${groupName}`);
   const g = slug(groupName), org = `Organization/${g}`, officer = `Person/${g}-officer`;
-  // Training adds light variations of its own wordings (case, small additions); the test set keeps its wordings as written.
-  const vary = (w: string) => [w, w.toLowerCase(), `${w} (${pb.label})`, `Need to: ${w.charAt(0).toLowerCase()}${w.slice(1)}`, `${w} ASAP`];
-  const wordings = (st: Playbook["steps"][number]) => (split === "train" ? st.train.flatMap(vary) : st.test);
+  // Training adds variations of its own wordings (case, small additions, two messy ones). The test set keeps its
+  // wordings as written, or makes each messy (opts.messy) so the list keeps its length and the same steps are picked.
+  const vary = (w: string) => [w, w.toLowerCase(), `${w} (${pb.label})`, `Need to: ${w.charAt(0).toLowerCase()}${w.slice(1)}`, `${w} ASAP`, messy(w, `${g}:1:${w}`), messy(w, `${g}:2:${w}`)];
+  const source = opts.wordings ?? split;
+  const wordings = (st: Playbook["steps"][number]) => (split === "train" ? st.train.flatMap(vary)
+    : (source === "train" ? st.train : st.test).map((w) => (opts.messy ? messy(w, `${g}:test:${w}`) : w)));
+  const set = opts.set ?? (split === "train" ? undefined : "tidy");
   const records: BixResource[] = [
     { resourceType: "Organization", id: g, meta: { version: 1 }, name: groupName },
     { resourceType: "Role", id: `${g}-officer`, meta: { version: 1 }, person: R(officer), organization: R(org), code: { system: "bayanihan:role", code: "officer" }, status: "active" },
@@ -127,7 +163,7 @@ export function buildGroup(pb: Playbook, groupName: string, split: "train" | "te
     const p = buildPack(mq, { records: remap(recs).records, viewer: officer, now: NOW });
     const ans = truth(p.labels);
     if (ans === null || !p.needsModel) return;
-    examples.push({ id: `${split}-${pb.kind}-${g}-${examples.length}`, split, group: groupName, projectKind: pb.kind, question: q.kind, text: p.text, answers: p.answers, answer: ans });
+    examples.push({ id: `${split}-${set ? `${set}-` : ""}${pb.kind}-${g}-${examples.length}`, split, ...(set ? { set } : {}), group: groupName, projectKind: pb.kind, question: q.kind, text: p.text, answers: p.answers, answer: ans });
   };
   const labelOf = (labels: Record<string, string>, ref: string) => Object.entries(labels).find(([, v]) => v === ids.ref(ref))?.[0] ?? null;
 
@@ -170,16 +206,21 @@ const EXTRA = ["Bagong Pag-asa", "Tambayan", "Sinag", "Alon", "Liwanag", "Tulay"
 export const TRAIN_GROUPS_PER_KIND = 10;
 
 export function buildAll() {
-  const out = { train: [] as Example[], test: [] as Example[], projects: 0, shortlistMisses: 0, shortlistTries: 0, groups: 0 };
+  const out = { train: [] as (Example | AskExample)[], test: [] as (Example | AskExample)[], projects: 0, shortlistMisses: 0, shortlistTries: 0, groups: 0 };
   for (const pb of PLAYBOOKS) {
     const extra = EXTRA.slice(0, Math.max(0, TRAIN_GROUPS_PER_KIND - pb.groups.train.length)).map((n) => `${n} ${pb.label} team`);
-    const runs: [string, "train" | "test"][] = [...[...pb.groups.train, ...extra].map((n) => [n, "train"] as [string, "train"]), [pb.groups.test, "test"]];
-    for (const [name, split] of runs) {
-      const d = buildGroup(pb, name, split);
+    // The held-out kind: all its groups go to the test set (its named training groups with their own wordings).
+    const runs: [string, "train" | "test", BuildOptions][] = pb.kind === HELD_OUT
+      ? [[pb.groups.test, "test", { set: "held-out-kind" }], ...pb.groups.train.map((n) => [n, "test", { set: "held-out-kind", wordings: "train" }] as [string, "test", BuildOptions])]
+      : [...[...pb.groups.train, ...extra].map((n) => [n, "train", {}] as [string, "train", BuildOptions]), [pb.groups.test, "test", { set: "tidy" }], [pb.groups.test, "test", { set: "messy", messy: true }]];
+    for (const [name, split, opts] of runs) {
+      const d = buildGroup(pb, name, split, opts);
       out[split].push(...d.examples);
       out.projects += d.projects; out.shortlistMisses += d.shortlistMisses; out.shortlistTries += d.shortlistTries; out.groups++;
     }
   }
+  const trained = PLAYBOOKS.filter((pb) => pb.kind !== HELD_OUT);
+  for (const split of ["train", "test"] as const) out[split].push(...intentExamples(split, trained, messy), ...selfExamples(split, messy));
   return out;
 }
 

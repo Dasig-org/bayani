@@ -821,6 +821,73 @@
  },
  {
   "resourceType": "Practice",
+  "id": "0429d7c3-abc8-4b22-8c8d-cd05d0e2ebd4",
+  "meta": {
+   "version": 1
+  },
+  "title": "Group the learners by reading level",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "tutoring-program"
+   }
+  ],
+  "team": "Learners",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/7d7970b4-b6d3-4a5f-b95c-717e583917d9"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "0329d630-acc8-4cb5-8b8d-cb72d1e2ed67",
+  "meta": {
+   "version": 1
+  },
+  "title": "Orient the parents",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "tutoring-program"
+   }
+  ],
+  "team": "Learners",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "0629dae9-a9c8-47fc-8a8d-c9dfd2e2eefa",
+  "meta": {
+   "version": 1
+  },
+  "title": "Prepare snacks for the sessions",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "tutoring-program"
+   }
+  ],
+  "team": "Materials",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
   "id": "b1c324ad-3ac2-4150-8f3d-706b080895e6",
   "meta": {
    "version": 1
@@ -1619,6 +1686,1975 @@
   "after": [
    {
     "reference": "Practice/79b603c0-c673-448d-89fc-092e12448c1b"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "aad16f46-de34-452d-bc5b-fa542b346a63",
+  "meta": {
+   "version": 1
+  },
+  "title": "Open the donation drive",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "relief-operation"
+   }
+  ],
+  "team": "Donations",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "abd170d9-dd34-439a-bd5b-fbe72a3468d0",
+  "meta": {
+   "version": 1
+  },
+  "title": "Set up the drop-off point",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "relief-operation"
+   }
+  ],
+  "team": "Donations",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "a8d16c20-dc34-4207-be5b-fd7a2d346d89",
+  "meta": {
+   "version": 1
+  },
+  "title": "Coordinate with the MDRRMO",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "relief-operation"
+   }
+  ],
+  "team": "Coordination",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "a9d16db3-db34-4074-bf5b-ff0d2c346bf6",
+  "meta": {
+   "version": 1
+  },
+  "title": "Get the masterlist of families",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "relief-operation"
+   }
+  ],
+  "team": "Coordination",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/a8d16c20-dc34-4207-be5b-fd7a2d346d89"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "aed17592-da34-4ee1-b85b-f4082f3470af",
+  "meta": {
+   "version": 1
+  },
+  "title": "Decide what goes in a relief pack",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "relief-operation"
+   }
+  ],
+  "team": "Repacking",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "afd17725-d934-4d4e-b95b-f59b2e346f1c",
+  "meta": {
+   "version": 1
+  },
+  "title": "Log the donations received",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "relief-operation"
+   }
+  ],
+  "team": "Donations",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/abd170d9-dd34-439a-bd5b-fbe72a3468d0"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "acd1726c-d834-4bbb-ba5b-f72e313473d5",
+  "meta": {
+   "version": 1
+  },
+  "title": "Call for repacking volunteers",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "relief-operation"
+   }
+  ],
+  "team": "Repacking",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "add173ff-d734-4a28-bb5b-f8c130347242",
+  "meta": {
+   "version": 1
+  },
+  "title": "Buy what's short",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "relief-operation"
+   }
+  ],
+  "team": "Finance",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/afd17725-d934-4d4e-b95b-f59b2e346f1c"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "b2d17bde-d634-4895-b45b-edbc333476fb",
+  "meta": {
+   "version": 1
+  },
+  "title": "Repack the relief goods",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "relief-operation"
+   }
+  ],
+  "team": "Repacking",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/aed17592-da34-4ee1-b85b-f4082f3470af"
+   },
+   {
+    "reference": "Practice/acd1726c-d834-4bbb-ba5b-f72e313473d5"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "b3d17d71-d534-4702-b55b-ef4f32347568",
+  "meta": {
+   "version": 1
+  },
+  "title": "Print distribution stubs",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "relief-operation"
+   }
+  ],
+  "team": "Distribution",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/a9d16db3-db34-4074-bf5b-ff0d2c346bf6"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "63b4becb-e3c4-449e-aecd-7375508118a0",
+  "meta": {
+   "version": 1
+  },
+  "title": "Arrange the trucks",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "relief-operation"
+   }
+  ],
+  "team": "Distribution",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "62b4bd38-e4c4-4631-adcd-71e251811a33",
+  "meta": {
+   "version": 1
+  },
+  "title": "Distribute the relief packs",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "relief-operation"
+   }
+  ],
+  "team": "Distribution",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/b2d17bde-d634-4895-b45b-edbc333476fb"
+   },
+   {
+    "reference": "Practice/63b4becb-e3c4-449e-aecd-7375508118a0"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "65b4c1f1-e1c4-4178-accd-704f52811bc6",
+  "meta": {
+   "version": 1
+  },
+  "title": "Post an update for donors",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "relief-operation"
+   }
+  ],
+  "team": "Documentation",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/62b4bd38-e4c4-4631-adcd-71e251811a33"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "64b4c05e-e2c4-430b-abcd-6ebc53811d59",
+  "meta": {
+   "version": 1
+  },
+  "title": "Liquidate the cash donations",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "relief-operation"
+   }
+  ],
+  "team": "Finance",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/add173ff-d734-4a28-bb5b-f8c130347242"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "97464bae-8cb0-4bcb-b91a-b2e4260c3a61",
+  "meta": {
+   "version": 1
+  },
+  "title": "Book the date with the Red Cross chapter",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "blood-drive"
+   }
+  ],
+  "team": "Partners",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "98464d41-8bb0-4a38-ba1a-b477250c38ce",
+  "meta": {
+   "version": 1
+  },
+  "title": "Reserve the venue",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "blood-drive"
+   }
+  ],
+  "team": "Venue",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/97464bae-8cb0-4bcb-b91a-b2e4260c3a61"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "95464888-8eb0-4ef1-bb1a-b60a240c373b",
+  "meta": {
+   "version": 1
+  },
+  "title": "Set a donor target",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "blood-drive"
+   }
+  ],
+  "team": "Partners",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "96464a1b-8db0-4d5e-bc1a-b79d230c35a8",
+  "meta": {
+   "version": 1
+  },
+  "title": "Open donor pre-registration",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "blood-drive"
+   }
+  ],
+  "team": "Promotions",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "9b4651fa-90b0-4217-b51a-ac982a0c40ad",
+  "meta": {
+   "version": 1
+  },
+  "title": "Post donor eligibility reminders",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "blood-drive"
+   }
+  ],
+  "team": "Promotions",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/96464a1b-8db0-4d5e-bc1a-b79d230c35a8"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "9c46538d-8fb0-4084-b61a-ae2b290c3f1a",
+  "meta": {
+   "version": 1
+  },
+  "title": "Get parental consent for young donors",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "blood-drive"
+   }
+  ],
+  "team": "Donor care",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "99464ed4-92b0-453d-b71a-afbe280c3d87",
+  "meta": {
+   "version": 1
+  },
+  "title": "Ask sponsors for snacks",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "blood-drive"
+   }
+  ],
+  "team": "Partners",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "9a465067-91b0-43aa-b81a-b151270c3bf4",
+  "meta": {
+   "version": 1
+  },
+  "title": "Prepare tokens for donors",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "blood-drive"
+   }
+  ],
+  "team": "Donor care",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "8f463f16-84b0-4f33-b11a-a64c1e0c2dc9",
+  "meta": {
+   "version": 1
+  },
+  "title": "Set up the donor stations",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "blood-drive"
+   }
+  ],
+  "team": "Venue",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/98464d41-8bb0-4a38-ba1a-b477250c38ce"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "904640a9-83b0-4da0-b21a-a7df1d0c2c36",
+  "meta": {
+   "version": 1
+  },
+  "title": "Assign volunteers to each station",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "blood-drive"
+   }
+  ],
+  "team": "Donor care",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "27abe8e3-eeb6-4a98-bf09-cbc5503db7da",
+  "meta": {
+   "version": 1
+  },
+  "title": "Count the blood bags collected",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "blood-drive"
+   }
+  ],
+  "team": "Documentation",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "26abe750-efb6-4c2b-be09-ca32513db96d",
+  "meta": {
+   "version": 1
+  },
+  "title": "Thank donors and partners",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "blood-drive"
+   }
+  ],
+  "team": "Promotions",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/27abe8e3-eeb6-4a98-bf09-cbc5503db7da"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "047b82b6-4006-4cf3-a3b1-2270294c9aad",
+  "meta": {
+   "version": 1
+  },
+  "title": "Coordinate with the school principal",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "school-supplies-drive"
+   }
+  ],
+  "team": "School partners",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "057b8449-3f06-4b60-a4b1-2403284c991a",
+  "meta": {
+   "version": 1
+  },
+  "title": "Get the class list per grade",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "school-supplies-drive"
+   }
+  ],
+  "team": "School partners",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/047b82b6-4006-4cf3-a3b1-2270294c9aad"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "027b7f90-4206-4019-a5b1-2596274c9787",
+  "meta": {
+   "version": 1
+  },
+  "title": "Sign the MOA with the school",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "school-supplies-drive"
+   }
+  ],
+  "team": "School partners",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/047b82b6-4006-4cf3-a3b1-2270294c9aad"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "037b8123-4106-4e86-a6b1-2729264c95f4",
+  "meta": {
+   "version": 1
+  },
+  "title": "Send solicitation letters",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "school-supplies-drive"
+   }
+  ],
+  "team": "Donations",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "087b8902-4406-433f-a7b1-28bc254c9461",
+  "meta": {
+   "version": 1
+  },
+  "title": "Decide the school kit contents",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "school-supplies-drive"
+   }
+  ],
+  "team": "Packing",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/057b8449-3f06-4b60-a4b1-2403284c991a"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "097b8a95-4306-41ac-a8b1-2a4f244c92ce",
+  "meta": {
+   "version": 1
+  },
+  "title": "Track pledges and donations",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "school-supplies-drive"
+   }
+  ],
+  "team": "Donations",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/037b8123-4106-4e86-a6b1-2729264c95f4"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "067b85dc-4606-4665-a9b1-2be2234c913b",
+  "meta": {
+   "version": 1
+  },
+  "title": "Buy the remaining supplies",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "school-supplies-drive"
+   }
+  ],
+  "team": "Finance",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/097b8a95-4306-41ac-a8b1-2a4f244c92ce"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "077b876f-4506-44d2-aab1-2d75224c8fa8",
+  "meta": {
+   "version": 1
+  },
+  "title": "Pack the school kits",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "school-supplies-drive"
+   }
+  ],
+  "team": "Packing",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/087b8902-4406-433f-a7b1-28bc254c9461"
+   },
+   {
+    "reference": "Practice/067b85dc-4606-4665-a9b1-2be2234c913b"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "0c7b8f4e-4806-498b-abb1-2f08214c8e15",
+  "meta": {
+   "version": 1
+  },
+  "title": "Join the Brigada Eskwela clean-up",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "school-supplies-drive"
+   }
+  ],
+  "team": "Program",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/047b82b6-4006-4cf3-a3b1-2270294c9aad"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "0d7b90e1-4706-47f8-acb1-309b204c8c82",
+  "meta": {
+   "version": 1
+  },
+  "title": "Prepare the turnover program",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "school-supplies-drive"
+   }
+  ],
+  "team": "Program",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "1a718a7b-8701-4ef0-b5db-fc499a951d1e",
+  "meta": {
+   "version": 1
+  },
+  "title": "Hand over the kits",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "school-supplies-drive"
+   }
+  ],
+  "team": "Program",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/077b876f-4506-44d2-aab1-2d75224c8fa8"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "197188e8-8801-4083-b4db-fab69b951eb1",
+  "meta": {
+   "version": 1
+  },
+  "title": "Get the acknowledgement receipt",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "school-supplies-drive"
+   }
+  ],
+  "team": "School partners",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/1a718a7b-8701-4ef0-b5db-fc499a951d1e"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "1c718da1-8901-4216-b3db-f923989519f8",
+  "meta": {
+   "version": 1
+  },
+  "title": "Submit the accomplishment report",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "school-supplies-drive"
+   }
+  ],
+  "team": "Finance",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/1a718a7b-8701-4ef0-b5db-fc499a951d1e"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "2c453f9b-a791-448a-a0ca-d78d3aad8dfc",
+  "meta": {
+   "version": 1
+  },
+  "title": "Coordinate with the CENRO",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "tree-planting"
+   }
+  ],
+  "team": "Partners",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "2b453e08-a891-461d-9fca-d5fa3bad8f8f",
+  "meta": {
+   "version": 1
+  },
+  "title": "Get the barangay's go-signal",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "tree-planting"
+   }
+  ],
+  "team": "Partners",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "2e4542c1-a591-4164-9eca-d4673cad9122",
+  "meta": {
+   "version": 1
+  },
+  "title": "Do an ocular of the site",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "tree-planting"
+   }
+  ],
+  "team": "Site",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/2c453f9b-a791-448a-a0ca-d78d3aad8dfc"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "2d45412e-a691-42f7-9dca-d2d43dad92b5",
+  "meta": {
+   "version": 1
+  },
+  "title": "Request the seedlings",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "tree-planting"
+   }
+  ],
+  "team": "Partners",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/2c453f9b-a791-448a-a0ca-d78d3aad8dfc"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "304545e7-a391-4e3e-9cca-d14136ad87b0",
+  "meta": {
+   "version": 1
+  },
+  "title": "Check the tide schedule",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "tree-planting"
+   }
+  ],
+  "team": "Site",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/2e4542c1-a591-4164-9eca-d4673cad9122"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "2f454454-a491-4fd1-9bca-cfae37ad8943",
+  "meta": {
+   "version": 1
+  },
+  "title": "Recruit planters",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "tree-planting"
+   }
+  ],
+  "team": "Volunteers",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "3245490d-a191-4b18-9aca-ce1b38ad8ad6",
+  "meta": {
+   "version": 1
+  },
+  "title": "Arrange the orientation on planting",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "tree-planting"
+   }
+  ],
+  "team": "Partners",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "3145477a-a291-4cab-99ca-cc8839ad8c69",
+  "meta": {
+   "version": 1
+  },
+  "title": "Prepare gloves, boots and stakes",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "tree-planting"
+   }
+  ],
+  "team": "Logistics",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "24453303-9f91-47f2-98ca-caf542ad9a94",
+  "meta": {
+   "version": 1
+  },
+  "title": "Arrange transport to the site",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "tree-planting"
+   }
+  ],
+  "team": "Logistics",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "23453170-a091-4985-97ca-c96243ad9c27",
+  "meta": {
+   "version": 1
+  },
+  "title": "Count the seedlings planted",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "tree-planting"
+   }
+  ],
+  "team": "Documentation",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "5600f228-8a7a-48d7-964e-8cfeb13949ad",
+  "meta": {
+   "version": 1
+  },
+  "title": "Send the report to the CENRO",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "tree-planting"
+   }
+  ],
+  "team": "Documentation",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/23453170-a091-4985-97ca-c96243ad9c27"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "5700f3bb-897a-4744-974e-8e91b039481a",
+  "meta": {
+   "version": 1
+  },
+  "title": "Monitor survival after a month",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "tree-planting"
+   }
+  ],
+  "team": "Site",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/23453170-a091-4985-97ca-c96243ad9c27"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "89cc34c8-ea2e-4669-9d41-416a096f2803",
+  "meta": {
+   "version": 1
+  },
+  "title": "Choose the community",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "gift-giving"
+   }
+  ],
+  "team": "Beneficiaries",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "8acc365b-e92e-44d6-9e41-42fd086f2670",
+  "meta": {
+   "version": 1
+  },
+  "title": "Get the list of families from the barangay",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "gift-giving"
+   }
+  ],
+  "team": "Beneficiaries",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/89cc34c8-ea2e-4669-9d41-416a096f2803"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "8bcc37ee-e82e-4343-9b41-3e440b6f2b29",
+  "meta": {
+   "version": 1
+  },
+  "title": "Send solicitation letters",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "gift-giving"
+   }
+  ],
+  "team": "Donations",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "8ccc3981-e72e-41b0-9c41-3fd70a6f2996",
+  "meta": {
+   "version": 1
+  },
+  "title": "Decide what goes in the gift bags",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "gift-giving"
+   }
+  ],
+  "team": "Packing",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "8dcc3b14-ee2e-4cb5-9941-3b1e0d6f2e4f",
+  "meta": {
+   "version": 1
+  },
+  "title": "Buy the goods",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "gift-giving"
+   }
+  ],
+  "team": "Finance",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/8ccc3981-e72e-41b0-9c41-3fd70a6f2996"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "8ecc3ca7-ed2e-4b22-9a41-3cb10c6f2cbc",
+  "meta": {
+   "version": 1
+  },
+  "title": "Hand out claim stubs",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "gift-giving"
+   }
+  ],
+  "team": "Beneficiaries",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/8acc365b-e92e-44d6-9e41-42fd086f2670"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "8fcc3e3a-ec2e-498f-9741-37f80f6f3175",
+  "meta": {
+   "version": 1
+  },
+  "title": "Pack the gift bags",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "gift-giving"
+   }
+  ],
+  "team": "Packing",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/8dcc3b14-ee2e-4cb5-9941-3b1e0d6f2e4f"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "90cc3fcd-eb2e-47fc-9841-398b0e6f2fe2",
+  "meta": {
+   "version": 1
+  },
+  "title": "Plan the short program",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "gift-giving"
+   }
+  ],
+  "team": "Program",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "81cc2830-f22e-4301-9541-34d2116f349b",
+  "meta": {
+   "version": 1
+  },
+  "title": "Hold the gift-giving",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "gift-giving"
+   }
+  ],
+  "team": "Program",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/8fcc3e3a-ec2e-498f-9741-37f80f6f3175"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "82cc29c3-f12e-416e-9641-3665106f3308",
+  "meta": {
+   "version": 1
+  },
+  "title": "Thank the donors",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "gift-giving"
+   }
+  ],
+  "team": "Donations",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/81cc2830-f22e-4301-9541-34d2116f349b"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "ea79aa71-fa22-4612-adbc-28b786f936c0",
+  "meta": {
+   "version": 1
+  },
+  "title": "Post the accounting of donations",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "gift-giving"
+   }
+  ],
+  "team": "Finance",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/8dcc3b14-ee2e-4cb5-9941-3b1e0d6f2e4f"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "c5df6437-7167-49fa-b6ed-744d7dac7690",
+  "meta": {
+   "version": 1
+  },
+  "title": "Ask what the community wants to learn",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "livelihood-training"
+   }
+  ],
+  "team": "Participants",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "c4df62a4-7267-4b8d-b5ed-72ba7eac7823",
+  "meta": {
+   "version": 1
+  },
+  "title": "Partner with a TESDA trainer",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "livelihood-training"
+   }
+  ],
+  "team": "Partners",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/c5df6437-7167-49fa-b6ed-744d7dac7690"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "c7df675d-6f67-46d4-b4ed-71277fac79b6",
+  "meta": {
+   "version": 1
+  },
+  "title": "Coordinate with the social welfare office",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "livelihood-training"
+   }
+  ],
+  "team": "Partners",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "c6df65ca-7067-4867-b3ed-6f9480ac7b49",
+  "meta": {
+   "version": 1
+  },
+  "title": "Register the participants",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "livelihood-training"
+   }
+  ],
+  "team": "Participants",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/c7df675d-6f67-46d4-b4ed-71277fac79b6"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "c1df5deb-6d67-43ae-b2ed-6e0181ac7cdc",
+  "meta": {
+   "version": 1
+  },
+  "title": "Book the training venue",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "livelihood-training"
+   }
+  ],
+  "team": "Partners",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "c0df5c58-6e67-4541-b1ed-6c6e82ac7e6f",
+  "meta": {
+   "version": 1
+  },
+  "title": "Buy training materials",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "livelihood-training"
+   }
+  ],
+  "team": "Materials",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/c4df62a4-7267-4b8d-b5ed-72ba7eac7823"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "c3df6111-6b67-4088-b0ed-6adb83ac8002",
+  "meta": {
+   "version": 1
+  },
+  "title": "Prepare starter kits",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "livelihood-training"
+   }
+  ],
+  "team": "Materials",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "c2df5f7e-6c67-421b-afed-694884ac8195",
+  "meta": {
+   "version": 1
+  },
+  "title": "Hold the training sessions",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "livelihood-training"
+   }
+  ],
+  "team": "Training",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/c6df65ca-7067-4867-b3ed-6f9480ac7b49"
+   },
+   {
+    "reference": "Practice/c0df5c58-6e67-4541-b1ed-6c6e82ac7e6f"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "bddf579f-6967-4d62-aeed-67b585ac8328",
+  "meta": {
+   "version": 1
+  },
+  "title": "Take attendance each session",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "livelihood-training"
+   }
+  ],
+  "team": "Documentation",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "bcdf560c-6a67-4ef5-aded-662286ac84bb",
+  "meta": {
+   "version": 1
+  },
+  "title": "Hold the graduation",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "livelihood-training"
+   }
+  ],
+  "team": "Training",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/c2df5f7e-6c67-421b-afed-694884ac8195"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "7fa82efc-d600-4a87-aecb-4f3e7c8105e9",
+  "meta": {
+   "version": 1
+  },
+  "title": "Follow up with the graduates",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "livelihood-training"
+   }
+  ],
+  "team": "Participants",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/bcdf560c-6a67-4ef5-aded-662286ac84bb"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "f51023c4-8e11-4799-a761-7c56c54a5ecb",
+  "meta": {
+   "version": 1
+  },
+  "title": "Get board approval for the event",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "fundraising-event"
+   }
+  ],
+  "team": "Ways and means",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "f6102557-8d11-4606-a861-7de9c44a5d38",
+  "meta": {
+   "version": 1
+  },
+  "title": "Set the fundraising target",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "fundraising-event"
+   }
+  ],
+  "team": "Finance",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "f71026ea-8c11-4473-a561-7930c74a61f1",
+  "meta": {
+   "version": 1
+  },
+  "title": "Book the venue",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "fundraising-event"
+   }
+  ],
+  "team": "Venue",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/f51023c4-8e11-4799-a761-7c56c54a5ecb"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "f810287d-8b11-42e0-a661-7ac3c64a605e",
+  "meta": {
+   "version": 1
+  },
+  "title": "Prepare the sponsorship packages",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "fundraising-event"
+   }
+  ],
+  "team": "Ways and means",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "f1101d78-9211-4de5-ab61-82a2c94a6517",
+  "meta": {
+   "version": 1
+  },
+  "title": "Open ticket sales",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "fundraising-event"
+   }
+  ],
+  "team": "Promotions",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/f71026ea-8c11-4473-a561-7930c74a61f1"
+   }
+  ]
+ },
+ {
+  "resourceType": "Practice",
+  "id": "f2101f0b-9111-4c52-ac61-8435c84a6384",
+  "meta": {
+   "version": 1
+  },
+  "title": "Promote on social media",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "fundraising-event"
+   }
+  ],
+  "team": "Promotions",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "f310209e-9011-4abf-a961-7f7ccb4a683d",
+  "meta": {
+   "version": 1
+  },
+  "title": "Line up the raffle prizes",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "fundraising-event"
+   }
+  ],
+  "team": "Ways and means",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "f4102231-8f11-492c-aa61-810fca4a66aa",
+  "meta": {
+   "version": 1
+  },
+  "title": "Finalize the program flow",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "fundraising-event"
+   }
+  ],
+  "team": "Program",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "ed10172c-9611-4431-af61-88eebd4a5233",
+  "meta": {
+   "version": 1
+  },
+  "title": "Brief the volunteers",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "fundraising-event"
+   }
+  ],
+  "team": "Program",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "ee1018bf-9511-429e-b061-8a81bc4a50a0",
+  "meta": {
+   "version": 1
+  },
+  "title": "Reconcile the ticket money",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "fundraising-event"
+   }
+  ],
+  "team": "Finance",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "c26ae125-48c8-4702-aa79-1c9b09107398",
+  "meta": {
+   "version": 1
+  },
+  "title": "Thank sponsors with an impact report",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "fundraising-event"
+   }
+  ],
+  "team": "Ways and means",
+  "source": "starter",
+  "after": []
+ },
+ {
+  "resourceType": "Practice",
+  "id": "c16adf92-49c8-4895-a979-1b080a10752b",
+  "meta": {
+   "version": 1
+  },
+  "title": "Send the financial report",
+  "organization": {
+   "reference": "Organization/e9955982-7878-43eb-a19b-9bfc90501595"
+  },
+  "status": "active",
+  "appliesTo": [
+   {
+    "system": "bayanihan:initiative-category",
+    "code": "fundraising-event"
+   }
+  ],
+  "team": "Finance",
+  "source": "starter",
+  "after": [
+   {
+    "reference": "Practice/ee1018bf-9511-429e-b061-8a81bc4a50a0"
    }
   ]
  }

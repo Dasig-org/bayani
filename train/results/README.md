@@ -62,3 +62,42 @@ weight against the base model before and after saving (it must differ), and expo
 GGUF adapter (`convert_lora_to_gguf.py`, loaded with `--lora`) so the merge step can't lose it.
 
 **Fixed (2026-11-14).** No merge: the LoRA add-on saved directly (336 tensors, 36 MB) and converted on its own. llama.cpp, 60 questions: base alone 0.27, base + Bayani add-on **0.90**. Ollama (base + ADAPTER, `train/Modelfile`), 40 questions: **35/40**. The merge step was what lost the training.
+
+## v1 data and the harder checks (B38, B39, B128), 2026-11-16
+
+**Data.** 13 kinds of project instead of 6: v0's six and seven written from how Philippine groups describe their own
+projects in public (relief operation, bloodletting drive, school supplies drive, mangrove planting, Christmas
+gift-giving, livelihood training, fundraising event); medical mission **left out of training** and only tested; every
+test project asked twice, tidy and messy; a 7th question (sorting a typed question into the app's kinds); a few
+identity and declining examples. 5,495 training, 1,202 test; the v0 test set kept as `test-v0.jsonl`
+(`docs/DATA.md`). Both bases trained in one Kaggle run (LoRA, 2 epochs, no merge). Full numbers:
+`trained-v1-2026-11-16.json`.
+
+Fixed-answer accuracy (transformers, on Kaggle):
+
+| Test set | OLMo-2-1B | **SmolLM2-1.7B** |
+|---|---|---|
+| Tidy (526) | 0.95 | 0.95 |
+| Messy, same projects (526) | 0.92 | 0.91 |
+| **Medical mission, never trained (106)** | 0.80 | **0.91** |
+| Sorting typed questions (37) | 0.84 | 0.87 |
+| Who it is / declining (7, exact sentence) | 7/7 | 7/7 |
+| v0 test set (254) | 0.93 | 0.94 |
+| All fixed answers / calibration error | 0.92 / 0.06 | 0.92 / 0.05 |
+| llama.cpp, base + add-on (120 across all sets) | 0.93 | 0.93 |
+
+On the Mac through the app's own code (`dasig-app/app/scripts/bayani-check.ts`, llama.cpp, Q4): the same per-question
+scores as above, within a point or two; at the app's threshold, 98% of answers are shown. Sorting the app's 14 check
+questions (`bayani-answer-check.ts`, `MODEL_ONLY=1`, add-on on): SmolLM2 **14/14**, OLMo 12/14; the base model alone
+(as the app sorts today, add-on off) 7/14, and 30% on the 37 held-out typed questions. Today's v0 model on the new
+test set: tidy 89%, messy 84% (all questions).
+
+**Reading.** Messy wordings cost about 3–4 points; a kind of project never trained costs SmolLM2 4 points and OLMo
+15 (its "which team" falls to 0.56). On the kinds they trained on the two bases are equal, and OLMo's Q4 file is only
+130 MB smaller, so **SmolLM2-1.7B was published** (`1.7B-q4-lora-2026-11-16`); OLMo-2-1B stays a candidate for small
+phones (B49). General titles stay weak (0.4 exact, 0.0 on the unseen kind), which is why the app writes titles from
+Practices first. Still synthetic: the next check is a real, consented group's project (B38).
+
+**Published** (2026-11-16): `huggingface.co/dasig/bayani-1`: the new add-on at `smollm2-2026-11-16/bayani-1-lora.gguf`
+(36 MB) and `bayani-manifest.json`. The base is byte-for-byte the v0 file (`base-q4_k_m.gguf`), so the manifest points
+at it. The app offers this as an update from the version with manifest support (after v0.20.0).
