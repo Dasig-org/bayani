@@ -86,6 +86,10 @@ For training you need Python and a GPU (a free Kaggle or Colab notebook is enoug
 By contributing you agree that your contribution (code, data, test questions, facts) is licensed under **Apache-2.0**
 ([`LICENSE`](LICENSE)).
 
+Sign off each commit (`git commit -s`), which adds a `Signed-off-by:` line. It certifies the
+[Developer Certificate of Origin](https://developercertificate.org/): that you wrote the change, or otherwise have the
+right to submit it under these licences.
+
 ## Questions
 
 [Dasig-org Discussions](https://github.com/orgs/Dasig-org/discussions), or hello@dasig.org. Security and privacy
