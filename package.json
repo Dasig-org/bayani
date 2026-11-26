@@ -4,18 +4,20 @@
   "description": "Bayani: the small language model of Bayanihan Intelligence. This package builds what Bayani reads (the context pack) from BIX records and maps its answers back. The model itself is in development.",
   "license": "Apache-2.0",
   "type": "module",
-  "main": "src/index.ts",
-  "types": "src/index.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "verify": "npm run typecheck && npm test",
     "golden": "UPDATE_GOLDEN=1 vitest run test/pack.test.ts",
     "data": "WRITE_DATA=1 vitest run test/data.test.ts",
-    "knowledge": "WRITE_DATA=1 vitest run test/knowledge.test.ts"
+    "knowledge": "WRITE_DATA=1 vitest run test/knowledge.test.ts",
+    "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "prepack": "npm run build"
   },
   "dependencies": {
-    "@bayanihan/core": "file:../bayanihan/packages/core"
+    "@bayanihan/core": "^0.1.0"
   },
   "devDependencies": {
     "@types/node": "^26.6.5",
@@ -29,15 +31,24 @@
     "url": "git+https://github.com/Dasig-org/bayani.git"
   },
   "files": [
+    "dist",
     "README.md",
     "data/generate.ts",
     "data/playbooks.ts",
     "docs",
-    "knowledge/facts",
-    "src"
+    "knowledge/facts"
   ],
   "exports": {
-    ".": "./src/index.ts",
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
     "./package.json": "./package.json"
+  },
+  "engines": {
+    "node": ">=22.13"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

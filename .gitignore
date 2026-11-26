@@ -26,3 +26,4 @@ GEMINI.md
 .vscode/
 .idea/
 __pycache__/
+dist/
