@@ -28,15 +28,10 @@ By taking part you agree to follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## Set up
 
-You need Node.js 22. `@bayanihan/*` packages aren't on npm yet, so the repositories sit side by side:
+You need Node.js 22.13 or newer. `@bayanihan/core` and `@bayanihan/bix` come from npm.
 
 ```sh
-mkdir dasig && cd dasig
-git clone https://github.com/Dasig-org/bix.git
-git clone https://github.com/Dasig-org/bayanihan.git
 git clone https://github.com/<you>/bayani.git     # your fork
-(cd bix && npm install)
-(cd bayanihan && npm install)
 cd bayani && npm install
 npm run verify        # typecheck + tests; should pass before you change anything
 ```
@@ -71,7 +66,8 @@ For training you need Python and a GPU (a free Kaggle or Colab notebook is enoug
 
 1. Branch from `main` in your fork: `git switch -c more-test-questions-cleanup`.
 2. Keep it to one change. For a training run, include the numbers and where the files are.
-3. Run `npm run verify` and say so in the pull request.
+3. Run `npm run verify` and say so in the pull request. The same checks run on every pull request. One test also
+   checks the Dasig app's prompt; it runs only when `dasig-app` is cloned and installed beside `bayani`.
 4. Fill in the pull request template.
 
 ## What happens next

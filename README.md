@@ -84,15 +84,17 @@ or check it with llama.cpp: `python3 train/local_check.py`.
 
 ## Develop
 
-The package in `src/` builds what Bayani reads (the *context pack*) from BIX records, and maps its answers back. It
-needs [BIX](https://github.com/Dasig-org/bix) and [Bayanihan](https://github.com/Dasig-org/bayanihan) beside it:
+The package in `src/` builds what Bayani reads (the *context pack*) from BIX records, and maps its answers back. It's
+on npm:
 
 ```sh
-mkdir dasig && cd dasig
-git clone https://github.com/Dasig-org/bix.git
-git clone https://github.com/Dasig-org/bayanihan.git
+npm install @bayanihan/bayani
+```
+
+To work on it you need Node.js 22.13 or newer:
+
+```sh
 git clone https://github.com/Dasig-org/bayani.git
-(cd bix && npm install) && (cd bayanihan && npm install)
 cd bayani && npm install
 npm run verify
 ```
