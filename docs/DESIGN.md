@@ -92,8 +92,7 @@ Per question: accuracy, and whether its probabilities match how often it's right
 | `data/out/` | Generated `train.jsonl`, `test.jsonl`, starter Practices; regenerate with `npm run data` |
 | `test/golden/` | Golden examples: fixed records and the exact pack they produce. Regenerate only with `npm run golden` |
 
-Setup: clone `bix`, `bayanihan` and `bayani` side by side, run `npm install` in `bayanihan/` and here, then
-`npm run verify`.
+Setup: clone `bayani`, run `npm install`, then `npm run verify`.
 
 **Coming next:** the evaluation harness and baseline results.
 
