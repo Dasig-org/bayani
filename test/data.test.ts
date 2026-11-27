@@ -13,7 +13,7 @@ describe("v0 data", () => {
   it("is the same every time", () => {
     const again = buildAll();
     expect(again.train.map((e) => e.text + e.answer)).toEqual(all.train.map((e) => e.text + e.answer));
-  });
+  }, 30_000); // builds the whole set again: about 7 s on a CI runner
 
   it("keeps the test set apart: no test wording ever appears in training", () => {
     const trainText = all.train.map((e) => e.text).join("\n");
